@@ -1,0 +1,33 @@
+parser: "@typescript-eslint/parser"
+parserOptions:
+  ecmaVersion: 6
+  project: tsconfig.eslint.json
+env:
+  browser: true
+extends:
+  - airbnb-typescript
+  - airbnb/hooks
+  - plugin:@typescript-eslint/recommended
+settings:
+  import/resolver:
+    alias:
+        map:
+        - ["components", "./components"]
+        "extensions": [".ts", ".tsx", ".js", ".jsx", ".json"]
+rules:
+  react/react-in-jsx-scope: off
+  react/jsx-props-no-spreading: off
+  import/order: [
+    error,
+    {
+      groups: [
+        "builtin",
+        "external",
+        "internal",
+        "parent",
+        "sibling",
+        "index"
+      ],
+      newlines-between: "always"
+    }
+  ]
