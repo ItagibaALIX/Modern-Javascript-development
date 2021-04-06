@@ -1,0 +1,65 @@
+version: '2.4'
+
+services:
+  db:
+    image: 'postgres'
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db-migrations:
+    build:
+      context: backend
+      dockerfile: dev.Dockerfile
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
+    volumes:
+      - ./backend:/home/node/app
+      - backend-node_modules:/home/node/app/node_modules
+    command: npx prisma migrate dev --preview-feature
+    depends_on:
+      db:
+        condition: service_healthy
+
+  backend:
+    build:
+      context: backend
+      dockerfile: dev.Dockerfile
+    ports:
+      - 4000:3000
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
+      PORT: 
+        4000
+      ALLOWED_ORIGIN: http://localhost:3000
+      SESSION_SECRET: toto
+      FRONTEND_URL: http://localhost:3000
+    volumes:
+      - ./backend:/home/node/app
+      - backend-node_modules:/home/node/app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+      db-migrations:
+        condition: service_started
+
+  front:
+    build:
+      context: front
+      dockerfile: dev.Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./front:/home/node/app
+      - front-node_modules:/home/node/app/node_modules
+
+volumes:
+  backend-node_modules:
+  front-node_modules:
