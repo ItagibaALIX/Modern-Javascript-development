@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { AppProps } from 'next/app';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-
 import theme from 'utils/theme';
 
 function App({ Component, pageProps }: AppProps): JSX.Element {

@@ -16,4 +16,3 @@ export const registerSchema = Yup.object().shape({
 });
 
 export type RegisterParams = Yup.InferType<typeof registerSchema>;
-

@@ -1,12 +1,12 @@
 import React from 'react';
 import { loginSchema, LoginParams } from 'utils/validation';
-import { makeStyles, useTheme } from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 import { Formik, Form } from 'formik';
-import { Typography } from "@material-ui/core";
+import { useLogin } from 'hooks/auth';
+
 import TextInput from 'components/TextInput';
 import PasswordInput from 'components/PasswordInput';
 import TextLink from 'components/TextLink';
-import { useLogin } from 'hooks/auth';
 import Button from 'components/Button';
 
 const useStyles = makeStyles((theme) => ({

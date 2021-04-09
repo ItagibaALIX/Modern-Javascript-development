@@ -1,13 +1,13 @@
 import React from 'react';
 import { Formik, Form } from 'formik';
-import { Typography } from "@material-ui/core";
+import { Typography, makeStyles } from '@material-ui/core';
+import { useRegister } from 'hooks/auth';
+import { registerSchema, RegisterParams } from 'utils/validation';
+
 import TextInput from 'components/TextInput';
 import PasswordInput from 'components/PasswordInput';
 import TextLink from 'components/TextLink';
-import { makeStyles, useTheme } from '@material-ui/core';
-import { useRegister } from 'hooks/auth';
 import Button from 'components/Button';
-import { registerSchema, RegisterParams } from 'utils/validation';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -61,64 +61,65 @@ export default function Register(): JSX.Element {
   const register = useRegister();
 
   return (
-      <div className={classes.container}>
-        <div className={classes.formContainer}>
-          <Typography
-            variant="subtitle1"
-            className={classes.text}
-          >
-            Join the our chat
-          </Typography>
-          <Formik
-            initialValues={initialValues}
-            validationSchema={registerSchema}
-            onSubmit={
+    <div className={classes.container}>
+      <div className={classes.formContainer}>
+        <Typography
+          variant="subtitle1"
+          className={classes.text}
+        >
+          Join the our chat
+        </Typography>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={registerSchema}
+          onSubmit={
               (values: RegisterParams): void => {
-              register(values);
-            }
+                register(values);
+              }
           }
-          >
-            <Form noValidate
+        >
+          <Form
+            noValidate
             className={classes.input}
-            >
-              <TextInput
-                type="text"
-                name="username"
-                label="username"
-                required
-                fullWidth
-              />
-              <TextInput
-                type="email"
-                name="email"
-                label="email"
-                required
-                fullWidth
-              />
-              <PasswordInput
-                name="password"
-                label="password"
-                required
-                fullWidth
-              />
-              <Button
-                color="primary"
-                variant="contained"
-                type="submit"
-                fullWidth
-              >
-                Sign up
-              </Button>
-            </Form>
-          </Formik>
-          <Typography
-            variant="caption"
-            className={classes.login}
           >
-            Already have an account?&nbsp;
-            <TextLink href="/login">Sign in</TextLink>
-          </Typography>
-        </div>
+            <TextInput
+              type="text"
+              name="username"
+              label="username"
+              required
+              fullWidth
+            />
+            <TextInput
+              type="email"
+              name="email"
+              label="email"
+              required
+              fullWidth
+            />
+            <PasswordInput
+              name="password"
+              label="password"
+              required
+              fullWidth
+            />
+            <Button
+              color="primary"
+              variant="contained"
+              type="submit"
+              fullWidth
+            >
+              Sign up
+            </Button>
+          </Form>
+        </Formik>
+        <Typography
+          variant="caption"
+          className={classes.login}
+        >
+          Already have an account?&nbsp;
+          <TextLink href="/login">Sign in</TextLink>
+        </Typography>
       </div>
+    </div>
   );
 }
