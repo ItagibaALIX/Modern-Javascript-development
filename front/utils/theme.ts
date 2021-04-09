@@ -14,10 +14,6 @@ const theme = createMuiTheme({
       secondary: '#E0E0E0',
       disabled: '#BDBDBD',
     },
-    action: {
-      focus: '#00B8E6',
-      active: '#00B8E6',
-    },
   },
   shape: {
     borderRadius: 5,

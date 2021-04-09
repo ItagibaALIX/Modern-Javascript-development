@@ -1,12 +1,6 @@
-// import { useRouter } from 'next/router';
 import { User } from 'types';
 import axios from 'axios';
 import log from 'loglevel';
-// const axios = require('../node_modules/axios');
-
-// import {
-//   USER, LOGOUT, REGISTER, LOGIN,
-// } from 'queries';
 
 import { LoginParams, RegisterParams } from 'utils/validation';
 
