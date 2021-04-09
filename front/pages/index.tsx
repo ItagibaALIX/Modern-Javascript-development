@@ -1,11 +1,10 @@
-import { Button } from '@material-ui/core';
+import { Button, makeStyles } from '@material-ui/core';
 import { useRouter } from 'next/router';
-import { makeStyles, Typography } from '@material-ui/core';
 
 import Head from 'components/Head';
 import Homepage from 'components/pages/Homepage';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   container: {
     display: 'flex',
     alignItems: 'center',
@@ -13,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     flex: 1,
     height: '100vh',
-  }
+  },
 }));
 
 export default function Home(): JSX.Element {

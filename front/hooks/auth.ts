@@ -51,7 +51,7 @@ export function useUser(): () => Promise<User> {
       const resp = await axios({
         method: 'get',
         url: 'http://localhost:4000/users/me',
-        timeout: 4000
+        timeout: 4000,
       });
       log.debug('call User (me) susccess');
       return (resp.data);
