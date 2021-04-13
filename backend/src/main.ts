@@ -15,11 +15,10 @@ async function bootstrap() {
       saveUninitialized: false,
     }),
   );
+
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(flash());
-  app.enableCors({origin: process.env.ALLOWED_ORIGIN});
   await app.listen(3000);
 }
 bootstrap();
-
