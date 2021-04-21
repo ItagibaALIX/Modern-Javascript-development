@@ -2,10 +2,28 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 model User {
-  id Int @default(autoincrement()) @id
-  email String @unique
+  id       String    @id @default(uuid())
+  email    String    @unique
   username String
   password String
+  Messages Message[]
+  Rooms    Room[]
+}
+
+model Message {
+  id      String @id @default(uuid())
+  author  User   @relation(fields: [userId], references: [id])
+  room    Room   @relation(fields: [roomId], references: [id])
+  content String
+  userId  String
+  roomId  String
+}
+
+model Room {
+  id       String    @id @default(uuid())
+  name     String    @unique
+  members  User[]
+  messages Message[]
 }
 
 datasource db {
