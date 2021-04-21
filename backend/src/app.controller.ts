@@ -13,6 +13,7 @@ export class AppController {
 
   @Post('auth/register')
   async register(@Request() req) {
+    console.log(req.body)
     return this.authService.register(req.body);
   }
 }

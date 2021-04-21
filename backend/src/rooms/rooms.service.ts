@@ -14,7 +14,7 @@ export class RoomsService {
   async createRoom(user: User, data: Prisma.RoomCreateInput): Promise<Room> {
     return this.prisma.room.create({
       data: {
-        members: [user],
+        //members: [user],
         ...data,
       }
     });

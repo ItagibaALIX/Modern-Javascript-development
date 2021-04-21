@@ -8,7 +8,7 @@ import * as passport from 'passport';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  
   app.use(
     session({
       secret: process.env.SESSION_SECRET,
@@ -16,7 +16,7 @@ async function bootstrap() {
       saveUninitialized: false,
     }),
   );
-
+  app.enableCors({origin: "https://hoppscotch.io"});
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(flash());
