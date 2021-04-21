@@ -8,14 +8,17 @@ import { hash } from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) {
+  }
 
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
-    return this.prisma.user.create({ data: {
-      email: data.email,
-      username: data.username,
-      password: await hash(data.password, 10),
-    }});
+    return this.prisma.user.create({
+      data: {
+        email: data.email,
+        username: data.username,
+        password: await hash(data.password, 10),
+      }
+    });
   }
 
   async users(params: {
