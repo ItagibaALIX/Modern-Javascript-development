@@ -1,15 +1,14 @@
 import React from 'react';
-
-import Layout from 'components/Layout';
-import { io } from "socket.io-client";
-
-export default Homepage;
+import { io } from 'socket.io-client';
 import { loginSchema } from 'utils/validation';
 import { makeStyles, Typography } from '@material-ui/core';
 import { Formik, Form } from 'formik';
 
+import Layout from 'components/Layout';
 import TextInput from 'components/TextInput';
 import Button from 'components/Button';
+
+export default Homepage;
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -76,8 +75,8 @@ function Homepage(): JSX.Element {
           <Formik
             initialValues={initialValues}
             // validationSchema={loginSchema}
-            onSubmit={(values: {message: string}): void => {
-              console.log("emit:", values.message)
+            onSubmit={(values: { message: string }): void => {
+              console.log('emit:', values.message);
               // socket.emit("msgToServer", values.message);
             }}
           >
