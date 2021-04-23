@@ -1,0 +1,108 @@
+import React from 'react';
+
+import Layout from 'components/Layout';
+import { io } from "socket.io-client";
+
+export default Homepage;
+import { loginSchema } from 'utils/validation';
+import { makeStyles, Typography } from '@material-ui/core';
+import { Formik, Form } from 'formik';
+
+import TextInput from 'components/TextInput';
+import Button from 'components/Button';
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    height: '85vh',
+  },
+  formContainer: {
+    display: 'flex',
+    maxHeight: '70%',
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    [theme.breakpoints.up('md')]: {
+      maxWidth: '50%',
+    },
+  },
+  input: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    minHeight: 150,
+    minWidth: 320,
+    '& .MuiFormControl-root': {
+      marginBottom: theme.spacing(2),
+    },
+  },
+  text: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(5),
+    minWidth: 175,
+    fontSize: 24,
+  },
+}));
+
+function Homepage(): JSX.Element {
+  // const socket = io("http://localhost:4000");
+  const classes = useStyles();
+  const initialValues = { message: '' };
+
+  // socket.on("msgToClient", (data) => {
+  //   console.log(data);
+  // });
+
+  return (
+    <Layout>
+      <h1 className="title">
+        Modern Javascript development
+      </h1>
+      <div className={classes.container}>
+        <div className={classes.formContainer}>
+          <Typography
+            variant="subtitle1"
+            className={classes.text}
+          >
+            Chat Box
+          </Typography>
+          <Formik
+            initialValues={initialValues}
+            // validationSchema={loginSchema}
+            onSubmit={(values: {message: string}): void => {
+              console.log("emit:", values.message)
+              // socket.emit("msgToServer", values.message);
+            }}
+          >
+            <Form noValidate className={classes.input}>
+              <TextInput
+                type="text"
+                name="message"
+                label="message"
+                required
+                rows={3}
+                fullWidth
+                multiline
+              />
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
+                fullWidth
+              >
+                Send
+              </Button>
+            </Form>
+          </Formik>
+        </div>
+      </div>
+    </Layout>
+  );
+}

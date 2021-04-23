@@ -22,7 +22,6 @@ export default function Home(): JSX.Element {
   return (
     <div className={classes.container}>
       <Head title="Modern Javascript development" />
-      <Homepage />
       <Button
         color="primary"
         variant="contained"
@@ -39,6 +38,7 @@ export default function Home(): JSX.Element {
       >
         Register
       </Button>
+      <Homepage />
     </div>
   );
 }
