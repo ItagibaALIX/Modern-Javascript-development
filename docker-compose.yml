@@ -1,0 +1,100 @@
+version: '3.7'
+
+services:
+  postgres:
+    container_name: 'postgres'
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-root}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-root}
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    networks:
+      - postgres
+    restart: unless-stopped
+    healthcheck:
+      test: pg_isready -U root
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db-migrations:
+    container_name: db-migrations
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    networks:
+      - postgres
+    environment:
+      DATABASE_URL: postgresql://root:root@postgres:5432/nest
+    command: npx prisma migrate dev
+    volumes:
+      - ./backend:/home/node/app
+      - backend-node_modules:/home/node/app/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq
+    ports:
+      - 5672:5672
+    networks:
+      - rabbitmq
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - db-migrations
+
+  backend:
+    container_name: backend
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql://root:root@postgres:5432/nest
+      PORT: 4000
+      ALLOWED_ORIGIN: http://localhost:3000
+      SESSION_SECRET: secret
+      FRONTEND_URL: http://localhost:3000
+    volumes:
+      - ./backend:/home/node/app
+      - backend-node_modules:/home/node/app/node_modules
+    ports:
+      - "4000:4000"
+    networks:
+      - postgres
+      - rabbitmq
+    restart: unless-stopped
+    depends_on:
+      - rabbitmq
+      - postgres
+      - db-migrations
+
+  frontend:
+    container_name: frontend
+    build:
+      context: frontend
+      dockerfile: dev.Dockerfile
+    ports:
+      - 3000:3000
+    environment:
+      BACKEND_URL: http://localhost:4000
+    volumes:
+      - ./frontend:/home/node/app
+      - frontend-node_modules:/home/node/app/node_modules
+
+networks:
+  postgres:
+    driver: bridge
+  rabbitmq:
+    driver: bridge
+
+volumes:
+  postgres:
+  backend-node_modules:
+  frontend-node_modules:

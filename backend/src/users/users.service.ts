@@ -17,6 +17,8 @@ export class UsersService {
         email: data.email,
         username: data.username,
         password: await hash(data.password, 10),
+        //Messages: [],
+        //Rooms: [],
       }
     });
   }
