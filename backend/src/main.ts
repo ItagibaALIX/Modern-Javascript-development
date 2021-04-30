@@ -16,7 +16,8 @@ async function bootstrap() {
       saveUninitialized: false,
     }),
   );
-  app.enableCors({origin: "https://hoppscotch.io"});
+  // app.enableCors({origin: "https://hoppscotch.io"});
+  app.enableCors({origin: process.env.ALLOWED_ORIGIN});
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(flash());
@@ -32,6 +33,7 @@ async function bootstrap() {
     },
   });
   await app.startAllMicroservicesAsync();
-  await app.listen(3000);
+  await app.listen(4000);
 }
 bootstrap();
+

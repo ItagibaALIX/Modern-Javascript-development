@@ -10,14 +10,24 @@
     "lint:fix": "eslint . --ext .ts,.tsx --fix --ignore-path=.gitignore"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.57",
     "@types/node": "^14.14.37",
     "@types/react": "^17.0.3",
+    "@types/socket.io-client": "^1.4.36",
     "@types/yup": "^0.29.11",
+    "axios": "^0.21.1",
+    "clsx": "^1.1.1",
+    "formik": "^2.2.6",
+    "loglevel": "^1.7.1",
     "next": "^10.0.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "socket.io-client": "^2.0.0",
     "ts-loader": "^8.1.0",
-    "typescript": "^4.2.3"
+    "typescript": "^4.2.3",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.19.0",

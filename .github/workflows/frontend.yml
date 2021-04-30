@@ -3,8 +3,8 @@ name: Frontend CI
 on:
   pull_request:
     paths:
-      - 'front/**'
-      - .github/workflows/front.yml
+      - 'frontend/**'
+      - .github/workflows/frontend.yml
 
 jobs:
   Build :
@@ -16,7 +16,7 @@ jobs:
       with:
         node-version: 12.x
     - name: Install dependencies and build
-      working-directory: ./front
+      working-directory: ./frontend
       run: |
         npm ci
         npm run build
@@ -32,7 +32,7 @@ jobs:
       with:
         node-version: 12.x
     - name: Install dependencies and launch linter
-      working-directory: ./front
+      working-directory: ./frontend
       run: |
         npm ci
         npm run lint

@@ -19,9 +19,6 @@ import { join } from 'path';
     RoomsModule,
     MessagesModule,
     EventsModule,
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '/static'),
-    }),
   ],
   controllers: [AppController, UsersController],
   providers: [AppService],
