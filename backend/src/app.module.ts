@@ -8,8 +8,8 @@ import { ConfigModule } from '@nestjs/config';
 import { RoomsModule } from './rooms/rooms.module';
 import { MessagesModule } from './messages/messages.module';
 import { EventsModule } from './events/events.module';
-// import { ServeStaticModule } from '@nestjs/serve-static';
-// import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -19,9 +19,6 @@ import { EventsModule } from './events/events.module';
     RoomsModule,
     MessagesModule,
     EventsModule,
-    // ServeStaticModule.forRoot({
-    //   rootPath: join(__dirname, '..', '/static'),
-    // }),
   ],
   controllers: [AppController, UsersController],
   providers: [AppService],

@@ -16,7 +16,7 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
     @WebSocketServer() server: Server;
     private logger: Logger = new Logger('EventsGateway');
     
-    @UseGuards(AuthenticatedGuard)
+    // @UseGuards(AuthenticatedGuard)
     @SubscribeMessage('msgToServer')
     handleMessage(client: Socket, payload: string): void {
         this.server.emit('msgToClient', payload);

@@ -15,4 +15,4 @@ COPY --chown=node:node . .
 
 RUN npm run generate:prisma
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start:dev"]
