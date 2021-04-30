@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import io from 'socket.io-client';
-import { loginSchema } from 'utils/validation';
 import { makeStyles, Typography } from '@material-ui/core';
 import { Formik, Form } from 'formik';
 
@@ -50,20 +49,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Homepage(): JSX.Element {  
-  const [lastMessage, setLastMessage] = useState('')
-  
-  // useEffect(() => {
-    const socket = io("ws://localhost:4000", {
-      autoConnect: true
-    });
+function Homepage(): JSX.Element {
+  const [lastMessage, setLastMessage] = useState('');
 
-    console.log('socket', socket);
-    socket.on("msgToClient", (data) => {
-      setLastMessage(data);
-      console.log(data);
-    });
-  
+  const socket = io('ws://localhost:4000', {
+    autoConnect: true,
+  });
+
+  console.log('socket', socket);
+  socket.on('msgToClient', (data) => {
+    setLastMessage(data);
+    console.log(data);
+  });
+
   const classes = useStyles();
   const initialValues = { message: '' };
 
@@ -91,7 +89,7 @@ function Homepage(): JSX.Element {
             // validationSchema={loginSchema}
             onSubmit={(values: { message: string }): void => {
               console.log('emit:', values.message);
-              socket.emit("msgToServer", values.message);
+              socket.emit('msgToServer', values.message);
             }}
           >
             <Form noValidate className={classes.input}>
