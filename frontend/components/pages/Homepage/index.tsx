@@ -3,7 +3,6 @@ import io from 'socket.io-client';
 import { makeStyles, Typography } from '@material-ui/core';
 import { Formik, Form } from 'formik';
 
-import Layout from 'components/Layout';
 import TextInput from 'components/TextInput';
 import Button from 'components/Button';
 
@@ -66,7 +65,7 @@ function Homepage(): JSX.Element {
   const initialValues = { message: '' };
 
   return (
-    <Layout>
+    <div>
       <h1 className="title">
         Modern Javascript development
       </h1>
@@ -114,6 +113,6 @@ function Homepage(): JSX.Element {
           </Formik>
         </div>
       </div>
-    </Layout>
+    </div>
   );
 }
