@@ -8,19 +8,32 @@ import { ConfigModule } from '@nestjs/config';
 import { RoomsModule } from './rooms/rooms.module';
 import { MessagesModule } from './messages/messages.module';
 import { EventsModule } from './events/events.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { MessagesController } from './messages/messages.controller';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    ClientsModule.register([
+      {
+        name: 'CORE_SERVICE',
+        transport: Transport.RMQ,
+        options: {
+          urls: [process.env.RABBITMQ_URL],
+          queue: 'messages_queue',
+          queueOptions: {
+            durable: false
+          },
+        }
+      }
+    ]),
     AuthModule,
     UsersModule,
     RoomsModule,
     MessagesModule,
     EventsModule,
   ],
-  controllers: [AppController, UsersController],
+  controllers: [AppController, UsersController, MessagesController],
   providers: [AppService],
 })
 export class AppModule {}

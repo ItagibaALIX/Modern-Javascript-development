@@ -1,16 +1,12 @@
-import { Controller, Get, Request, UseGuards } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { User as UserModel } from '@prisma/client';
+import { Controller, Request, Get, UseGuards } from '@nestjs/common';
 import { AuthenticatedGuard } from '../auth/authenticated.guard';
+import { User } from '@prisma/client';
 
 @UseGuards(AuthenticatedGuard)
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {
-  }
-
   @Get('me')
-  async me(@Request() req): Promise<UserModel> {
-    return req.user;
+  async post(@Request() req): Promise<User> {
+    return req.user.id
   }
 }
