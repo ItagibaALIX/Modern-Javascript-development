@@ -14,7 +14,7 @@ function getFontSize(size: string): number {
   return 10;
 }
 
-function getSize(type: string, size: string): { width: number | string; height: number | string} {
+function getSize(type: string, size: string): { width: number | string; height: number | string } {
   if (type === 'mini') {
     return ({ width: 30, height: 40 });
   }
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   baseline: {
     color: theme.palette.primary.main,
     fontWeight: 'bold',
-    fontSize: (props: { size: string}): number => getFontSize(props.size),
+    fontSize: (props: { size: string }): number => getFontSize(props.size),
     textDecoration: 'none',
   },
   logo: {

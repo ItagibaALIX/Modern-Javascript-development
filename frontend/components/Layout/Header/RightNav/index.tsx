@@ -1,12 +1,12 @@
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useUser } from 'hooks/auth';
+import { useState, useEffect } from 'react';
 
 import ButtonLink from 'components/ButtonLink';
 
 import MobileMenu from './MobileMenu';
 import UserCard from './UserCard';
-import { useState, useEffect } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   menuIcon: {
@@ -22,17 +22,17 @@ function RightNav(): JSX.Element {
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const getUser = useUser();
   const classes = useStyles();
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     getUser().then((newUser) => (
       setUser(newUser)
     )).catch((e) => {
       console.log(e);
-    })
-  }, [getUser])
+    });
+  }, [getUser]);
 
-  console.log("user", user)
+  console.log('user', user);
 
   if (isMobile) {
     return (

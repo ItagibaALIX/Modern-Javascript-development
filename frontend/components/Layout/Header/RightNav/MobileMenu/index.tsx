@@ -47,15 +47,15 @@ function MobileMenu(): JSX.Element {
   const styles = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const getUser = useUser();
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     getUser().then((newUser) => (
       setUser(newUser)
     )).catch((e) => {
       console.log(e);
-    })
-  }, [getUser])
+    });
+  }, [getUser]);
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>): void => {
     setAnchorEl(event.currentTarget);

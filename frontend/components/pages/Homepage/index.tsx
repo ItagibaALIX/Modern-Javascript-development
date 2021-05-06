@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles, Paper, Typography } from '@material-ui/core';
+
 import ChatBox from 'components/chatbox';
 import Room from 'components/Room';
 
@@ -15,8 +16,8 @@ const useStyles = makeStyles((theme) => ({
   containerRooms: {
     display: 'flex',
     flex: 0.3,
-    maxHeight: "93vh",
-    height: "93vh",
+    maxHeight: '93vh',
+    height: '93vh',
     padding: theme.spacing(1),
   },
   containerChatBox: {
@@ -31,14 +32,14 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     textAlign: 'center',
     color: theme.palette.text.primary,
-    maxHeight: "100%",
-    height: "100%",
+    maxHeight: '100%',
+    height: '100%',
     borderRadius: theme.shape.borderRadius,
     width: '100%',
     border: 'solid',
     borderWidth: '1px',
     borderColor: theme.palette.primary.main,
-    overflowY: "scroll",
+    overflowY: 'scroll',
   },
   rooms: {
     margin: theme.spacing(2),
@@ -48,13 +49,11 @@ const useStyles = makeStyles((theme) => ({
 function Homepage(): JSX.Element {
   const classes = useStyles();
 
-  const listRooms = rooms.map((r) => {
-    return (
-      <div className={classes.rooms}>
-        <Room user={r.user} />
-      </div>
-    )
-  })
+  const listRooms = rooms.map((r) => (
+    <div className={classes.rooms}>
+      <Room user={r.user} />
+    </div>
+  ));
 
   return (
     <div className={classes.container}>
@@ -73,121 +72,120 @@ function Homepage(): JSX.Element {
   );
 }
 
-
 const rooms = [
   {
     user: {
       id: 1,
-      username: "Raphael",
-      email: "raph@gmail.com",
-    }
-  },
-  {
-    user: {
-      id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
-  },
-  {
-    user: {
-      id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
-  },
-  {
-
-    user: {
-      id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
-  },
-  {
-
-    user: {
-      id: 1,
-      username: "Raphael",
-      email: "raph@gmail.com",
-    }
-  },
-  {
-
-    user: {
-      id: 1,
-      username: "Raphael",
-      email: "raph@gmail.com",
-    }
-  },
-  {
-    user: {
-      id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
-  },
-  {
-    user: {
-      id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
-  },
-  {
-    user: {
-      id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
-  },
-  {
-    user: {
-      id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
-  },
-  {
-    user: {
-      id: 1,
-      username: "Raphael",
-      email: "raph@gmail.com",
-    }
-  },
-  {
-    user: {
-      id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
-  },
-  {
-    user: {
-      id: 1,
-      username: "Raphael",
-      email: "raph@gmail.com",
-    }
-  },
-  {
-    user: {
-      id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
-  },
-  {
-    user: {
-      id: 1,
-      username: "Raphael",
-      email: "raph@gmail.com",
-    }
-  },
-  {
-    user: {
-      id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
+      username: 'Raphael',
+      email: 'raph@gmail.com',
     },
   },
-]
+  {
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+  {
+
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+  {
+
+    user: {
+      id: 1,
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
+  },
+  {
+
+    user: {
+      id: 1,
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 1,
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 1,
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 1,
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+];

@@ -59,7 +59,7 @@ function UserCard(): JSX.Element {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
   const classes = useStyles();
-  const user = useUser();s
+  const user = useUser();
 
   if (!user) {
     return null;

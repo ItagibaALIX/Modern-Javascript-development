@@ -10,7 +10,7 @@ const useStyles = makeStyles(() => ({
     maxHeight: '100vh',
     height: '100vh',
     display: 'flex',
-    flexDirection: "column",
+    flexDirection: 'column',
   },
   containerBody: {
     display: 'flex',

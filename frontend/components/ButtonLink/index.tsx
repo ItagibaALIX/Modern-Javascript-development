@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import Button, { ButtonProps } from 'components/Button';
 
-export type ButtonLinkProps = { href: string; as?: string} & ButtonProps;
+export type ButtonLinkProps = { href: string; as?: string } & ButtonProps;
 
 const ButtonLink = forwardRef(
   ({ href, as, ...props }: ButtonLinkProps, ref: Ref<HTMLButtonElement>) => (

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
+
 import Avatar from 'components/Avatar';
 
 const useStyles = makeStyles((theme) => ({
@@ -26,8 +27,8 @@ const useStyles = makeStyles((theme) => ({
     overflowY: 'scroll',
   },
   containerFlexPostion: {
-    display: "flex",
-    justifyContent: (props: { id: number }): string => props.id ? 'flex-end' : 'flex-start',
+    display: 'flex',
+    justifyContent: (props: { id: number }): string => (props.id ? 'flex-end' : 'flex-start'),
     alignItems: 'center',
     width: '100%',
     maxWidth: '100%',
@@ -43,10 +44,10 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0.5),
     border: `solid 1px ${theme.palette.primary.main}`,
     borderRadius: '20px',
-    backgroundColor: (props: { id: number }): string => props.id ? theme.palette.primary.main : 'white',
+    backgroundColor: (props: { id: number }): string => (props.id ? theme.palette.primary.main : 'white'),
   },
   text: {
-    color: (props: { id: number }): string => props.id ? "white" : theme.palette.text.primary,
+    color: (props: { id: number }): string => (props.id ? 'white' : theme.palette.text.primary),
 
     display: 'flex',
     justifyContent: 'center',
@@ -61,51 +62,51 @@ const useStyles = makeStyles((theme) => ({
 
 function Message(props): JSX.Element {
   // const { lastMessage } = props;
-  const id = props.m.user.id;
+  const { id } = props.m.user;
   const classes = useStyles({ id });
 
   return (
     <div className={classes.containerFlexPostion}>
       {
-        props.m.user.id ?
-          <>
-            <div className={classes.containerMessage}>
-              <Typography
-                variant="subtitle1"
-                className={classes.text}
-              >
-                {props.m.m}
-              </Typography>
-            </div>
-            <Avatar user={props.m.user} withName={false} />
-          </>
-          :
-          <>
-            <Avatar user={props.m.user} withName={false} />
-            <div className={classes.containerMessage}>
-              <Typography
-                variant="subtitle1"
-                className={classes.text}
-              >
-                {props.m.m}
-              </Typography>
-            </div>
-          </>
+        props.m.user.id
+          ? (
+            <>
+              <div className={classes.containerMessage}>
+                <Typography
+                  variant="subtitle1"
+                  className={classes.text}
+                >
+                  {props.m.m}
+                </Typography>
+              </div>
+              <Avatar user={props.m.user} withName={false} />
+            </>
+          )
+          : (
+            <>
+              <Avatar user={props.m.user} withName={false} />
+              <div className={classes.containerMessage}>
+                <Typography
+                  variant="subtitle1"
+                  className={classes.text}
+                >
+                  {props.m.m}
+                </Typography>
+              </div>
+            </>
+          )
       }
     </div>
   );
 }
 
-
 function ChatMessage(props): JSX.Element {
   // const { lastMessage } = props;
   const classes = useStyles({ id: 1 });
 
-  const messagesFormated = messages.map((m) => {
-    return (
-      <Message m={m} />
-    )
-  })
+  const messagesFormated = messages.map((m) => (
+    <Message m={m} />
+  ));
 
   return (
     <div className={classes.container}>
@@ -120,190 +121,190 @@ export default ChatMessage;
 
 const messages = [
   {
-    m: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ",
+    m: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ',
     user: {
       id: 1,
-      username: "Raphael",
-      email: "raph@gmail.com",
-    }
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
   },
   {
-    m: "Excepteur sint occ",
+    m: 'Excepteur sint occ',
     user: {
       id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
   },
   {
-    m: "si architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia ",
+    m: 'si architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia ',
     user: {
       id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
   },
   {
-    m: "t is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious phy",
+    m: 't is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious phy',
 
     user: {
       id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
   },
   {
-    m: "ovident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est ",
+    m: 'ovident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est ',
 
     user: {
       id: 1,
-      username: "Raphael",
-      email: "raph@gmail.com",
-    }
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
   },
   {
-    m: " officiis debitis aut rerum necessita",
+    m: ' officiis debitis aut rerum necessita',
 
     user: {
       id: 1,
-      username: "Raphael",
-      email: "raph@gmail.com",
-    }
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
   },
   {
-    m: "stias excep",
+    m: 'stias excep',
     user: {
       id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
   },
   {
-    m: "Ut enim ad minima veniam, quis nostrum exercitationem",
+    m: 'Ut enim ad minima veniam, quis nostrum exercitationem',
     user: {
       id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
   },
   {
-    m: "non provident, similique sunt in culpa qui officia",
+    m: 'non provident, similique sunt in culpa qui officia',
     user: {
       id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
   },
   {
-    m: "possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delec",
+    m: 'possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delec',
     user: {
       id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
   },
   {
-    m: "similique sunt in culpa qui officia deserunt mollitia animi",
+    m: 'similique sunt in culpa qui officia deserunt mollitia animi',
     user: {
       id: 1,
-      username: "Raphael",
-      email: "raph@gmail.com",
-    }
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
   },
   {
-    m: "obscure Latin words, consectetur, from a Lorem Ipsum",
+    m: 'obscure Latin words, consectetur, from a Lorem Ipsum',
     user: {
       id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
   },
   {
-    m: "scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised",
+    m: 'scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised',
     user: {
       id: 1,
-      username: "Raphael",
-      email: "raph@gmail.com",
-    }
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
   },
   {
-    m: " It uses a dictionary of over 200 Latin words, combined with a handful",
+    m: ' It uses a dictionary of over 200 Latin words, combined with a handful',
     user: {
       id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
   },
   {
-    m: "will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
+    m: 'will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).',
     user: {
       id: 1,
-      username: "Raphael",
-      email: "raph@gmail.com",
-    }
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
   },
   {
-    m: "totot",
+    m: 'totot',
     user: {
       id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
   },
   {
-    m: "totot",
+    m: 'totot',
     user: {
       id: 1,
-      username: "Raphael",
-      email: "raph@gmail.com",
-    }
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
   },
   {
-    m: "totot",
+    m: 'totot',
     user: {
       id: 1,
-      username: "Raphael",
-      email: "raph@gmail.com",
-    }
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
   },
   {
-    m: "totot",
+    m: 'totot',
     user: {
       id: 1,
-      username: "Raphael",
-      email: "raph@gmail.com",
-    }
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
   },
   {
-    m: "totot",
+    m: 'totot',
     user: {
       id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
   },
   {
-    m: "totot",
+    m: 'totot',
     user: {
       id: 0,
-      username: "Maxime",
-      email: "max@gmail.com",
-    }
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
   },
   {
-    m: "totot",
+    m: 'totot',
     user: {
       id: 1,
-      username: "Raphael",
-      email: "raph@gmail.com",
-    }
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
   },
   {
-    m: "totot",
+    m: 'totot',
     user: {
       id: 1,
-      username: "Raphael",
-      email: "raph@gmail.com",
-    }
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
   },
-]
+];

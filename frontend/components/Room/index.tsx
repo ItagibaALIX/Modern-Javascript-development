@@ -1,8 +1,9 @@
 import { Typography, Avatar as MuiAvatar } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Avatar from 'components/Avatar';
-import { User } from '../../types';
 
+import Avatar from 'components/Avatar';
+
+import { User } from '../../types';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   container: {
