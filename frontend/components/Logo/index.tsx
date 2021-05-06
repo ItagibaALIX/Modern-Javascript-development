@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export interface LogoProps {
-  type?: 'classic' | 'mini' | 'baseline';
+  type?: 'classic' | 'mini';
   size?: 'sm' | 'md' | 'lg' | 'xl' | null;
   className?: string;
 }
@@ -75,7 +75,6 @@ const Logo = ({ type = 'classic', size = null, className }: LogoProps): JSX.Elem
             width={dimension.width}
             height={dimension.height}
           />
-          { type === 'baseline' && (<Typography className={classes.baseline}>C++ Package Manager</Typography>)}
         </div>
       </a>
     </Link>

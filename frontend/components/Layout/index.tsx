@@ -7,6 +7,15 @@ import Footer from './Footer';
 const useStyles = makeStyles(() => ({
   container: {
     minHeight: '100vh',
+    maxHeight: '100vh',
+    height: '100vh',
+    display: 'flex',
+    flexDirection: "column",
+  },
+  containerBody: {
+    display: 'flex',
+    height: '95vh',
+    maxHeight: '95vh',
   },
 }));
 
@@ -21,7 +30,9 @@ function Layout({ children }: LayoutProps): JSX.Element {
     <>
       <div className={classes.container}>
         <Header />
-        {children}
+        <div className={classes.containerBody}>
+          {children}
+        </div>
       </div>
       <Footer />
     </>

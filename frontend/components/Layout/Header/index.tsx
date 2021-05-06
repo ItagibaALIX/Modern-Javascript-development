@@ -9,6 +9,8 @@ import Logo from 'components/Logo';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
+    display: 'flex',
+    height: '7vh',
     backgroundColor: theme.palette.background.default,
   },
   container: {
