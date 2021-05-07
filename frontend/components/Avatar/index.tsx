@@ -22,6 +22,20 @@ function intToRGB(i) {
   return '00000'.substring(0, 6 - c.length) + c;
 }
 
+function getSize(size: string): string {
+  if (size === 'mini') {
+    return '25px';
+  }
+  return '40px';
+}
+
+function getFontSize(size: number): number {
+  if (size === 'mini') {
+    return 12;
+  }
+  return 16;
+}
+
 interface StyledProps {
   name: string;
 }
@@ -34,11 +48,20 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   picture: {
     marginRight: theme.spacing(1),
+    width: (props: { size: string }): string => getSize(props.size),
+    height: (props: { size: string }): string => getSize(props.size),
     backgroundColor: (props: StyledProps) => `#${intToRGB(hashCode(props.name))}`,
     opacity: 0.8,
   },
   name: {
-    fontSize: 16,
+    fontSize: (props: { size: string }): number => getFontSize(props.size),
+  },
+  containerLetter: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
   },
 }));
 
@@ -50,6 +73,7 @@ export interface AvatarProps {
   };
   user: User;
   withName?: boolean
+  size?: 'mini' | 'medium',
 }
 
 function Avatar(props: AvatarProps): JSX.Element {
@@ -57,8 +81,9 @@ function Avatar(props: AvatarProps): JSX.Element {
     user,
     classes,
     withName = true,
+    size = "mini",
   } = props;
-  const styles = useStyles({ name: user?.username ?? '' });
+  const styles = useStyles({ name: user?.username ?? '', size });
   const containerClass = clsx(styles.container, classes?.container);
   const pictureClass = clsx(styles.picture, classes?.picture);
   const nameClass = clsx(styles.name, classes?.name);
@@ -71,7 +96,11 @@ function Avatar(props: AvatarProps): JSX.Element {
         src=""
         className={pictureClass}
       >
-        {user?.username?.[0].toUpperCase()}
+        <div className={styles.containerLetter}>
+          <Typography className={nameClass} variant="body1">
+            {user?.username?.[0].toUpperCase()}
+          </Typography>
+        </div>
       </MuiAvatar>
       { withName && <Typography className={nameClass} variant="body1">{user?.username}</Typography> }
     </div>

@@ -4,8 +4,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+
 import RightNav from 'components/Layout/Header/RightNav';
 import Logo from 'components/Logo';
+import { useUser } from 'hooks/auth';
+import { useState, useEffect } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -41,12 +46,32 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'left',
     margin: '0px 4px',
   },
-
+  addRoomButton: {
+    width: '150px',
+    height: '40px',
+    borderRadius: '7px',
+    color: 'white',
+  },
+  textAddRoomButton: {
+    color: 'white',
+    paddingRight: theme.spacing(1),
+    fontWeight: 500,
+  },
 }));
 
 function Header(): JSX.Element {
   const classes = useStyles();
   const elevationTrigger = useScrollTrigger({ threshold: 10, disableHysteresis: true });
+  const getUser = useUser();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    getUser().then((newUser) => (
+      setUser(newUser)
+    )).catch((e) => {
+      console.log(e);
+    });
+  }, [getUser]);
 
   return (
     <AppBar
@@ -62,6 +87,15 @@ function Header(): JSX.Element {
         <Hidden implementation="css" xsDown>
           <Logo type="classic" size="sm" />
         </Hidden>
+        {
+          user ?
+          <Fab color="primary" aria-label="add" className={classes.addRoomButton}>
+            <Typography variant="subtitle1" className={classes.textAddRoomButton}>
+              New room
+            </Typography>
+            <AddIcon />
+          </Fab> : <></>
+        }
         <RightNav />
       </Toolbar>
     </AppBar>

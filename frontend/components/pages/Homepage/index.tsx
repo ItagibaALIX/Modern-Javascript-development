@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { makeStyles, Paper, Typography } from '@material-ui/core';
-
-import ChatBox from 'components/chatbox';
 import Room from 'components/Room';
+import ChatBox from 'components/chatbox';
 
+import RoomSettings from 'components/RoomSettings';
 export default Homepage;
 
 const useStyles = makeStyles((theme) => ({
@@ -13,20 +13,39 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     maxHeight: '100%',
   },
-  containerRooms: {
+  paddingPannel: {
+    padding: theme.spacing(1),
     display: 'flex',
-    flex: 0.3,
+    flex: 0.2,
     maxHeight: '93vh',
     height: '93vh',
-    padding: theme.spacing(1),
+  },
+  pannel: {
+    display: 'flex',
+    width: '100%',
+    flexDirection: 'column',
+    maxHeight: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: theme.shape.borderRadius,
+    border: 'solid',
+    borderWidth: '1px',
+    borderColor: theme.palette.primary.main,
   },
   containerChatBox: {
     display: 'flex',
     height: '100%',
     maxHeight: '100%',
-    flex: 0.7,
+    flex: 0.6,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  containerSettings: {
+    display: 'flex',
+    maxHeight: '100%',
+    height: '100%',
+    padding: theme.spacing(1),
   },
   paper: {
     padding: theme.spacing(1),
@@ -34,15 +53,15 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
     maxHeight: '100%',
     height: '100%',
-    borderRadius: theme.shape.borderRadius,
     width: '100%',
-    border: 'solid',
-    borderWidth: '1px',
-    borderColor: theme.palette.primary.main,
     overflowY: 'scroll',
   },
   rooms: {
-    margin: theme.spacing(2),
+  },
+  subtitle: {
+    fontWeight: 800,
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(2),
   },
 }));
 
@@ -57,16 +76,26 @@ function Homepage(): JSX.Element {
 
   return (
     <div className={classes.container}>
-      <div className={classes.containerRooms}>
-        <div className={classes.paper}>
-          <Typography variant="subtitle1">
-            Chat Room:
+      <div className={classes.paddingPannel}>
+        <div className={classes.pannel}>
+          <Typography variant="subtitle1" className={classes.subtitle}>
+            Chat Rooms:
           </Typography>
-          {listRooms}
+          <div className={classes.paper}>
+            {listRooms}
+          </div>
         </div>
       </div>
       <div className={classes.containerChatBox}>
         <ChatBox />
+      </div>
+      <div className={classes.paddingPannel}>
+        <div className={classes.pannel}>
+          <Typography variant="subtitle1" className={classes.subtitle}>
+            Room settings:
+          </Typography>
+          <RoomSettings />
+        </div>
       </div>
     </div>
   );
