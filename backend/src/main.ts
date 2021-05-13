@@ -16,7 +16,7 @@ async function bootstrap() {
       saveUninitialized: false,
     }),
   );
-  // app.enableCors({origin: "https://hoppscotch.io"});
+  //app.enableCors({origin: "https://hoppscotch.io"});
   app.enableCors({origin: process.env.ALLOWED_ORIGIN});
   app.use(passport.initialize());
   app.use(passport.session());

@@ -7,7 +7,7 @@ export function useLogin(): (variables: LoginParams) => Promise<void> {
   return (async ({ email, password }: LoginParams): Promise<void> => {
     try {
       log.debug('call Login');
-      await axios({
+      const { data: { access_token: accessToken } } = await axios({
         method: 'post',
         url: 'http://localhost:4000/auth/login',
         timeout: 4000,
@@ -16,6 +16,8 @@ export function useLogin(): (variables: LoginParams) => Promise<void> {
           password,
         },
       });
+      window.localStorage.setItem('token', accessToken);
+      console.log(accessToken);
       log.debug('Login success');
     } catch (err) {
       log.error(new Error(`Login failed:${err}`));
@@ -52,8 +54,11 @@ export function useUser(): () => Promise<User> {
         method: 'get',
         url: 'http://localhost:4000/users/me',
         timeout: 4000,
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem('token')}`,
+        },
       });
-      log.debug('call User (me) susccess');
+      log.debug('call User (me) success');
       return (resp.data);
     } catch (err) {
       log.error(new Error(`User (me) failed:${err}`));

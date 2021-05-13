@@ -13,7 +13,8 @@ export class MessagesController {
 
   @Post('send')
   async post(@Request() req): Promise<void> {
+    console.log('SEND MESSAGE', req.user);
     const exchange = this.conn.declareExchange("TEST", "fanout");
-    exchange.send(new Amqp.Message("TESTDATA"))
+    exchange.send(new Amqp.Message(JSON.stringify({ sender: req.user.username, message: req.body.message })))
   }
 }

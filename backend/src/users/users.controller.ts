@@ -7,6 +7,6 @@ import { User } from '@prisma/client';
 export class UsersController {
   @Get('me')
   async post(@Request() req): Promise<User> {
-    return req.user.id
+    return req.user
   }
 }

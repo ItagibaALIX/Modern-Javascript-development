@@ -60,11 +60,38 @@ services:
       ALLOWED_ORIGIN: http://localhost:3000
       SESSION_SECRET: secret
       FRONTEND_URL: http://localhost:3000
+      RABBITMQ_URL: amqp://rabbitmq:5672
     volumes:
       - ./backend:/home/node/app
       - backend-node_modules:/home/node/app/node_modules
     ports:
       - "4000:4000"
+    networks:
+      - postgres
+      - rabbitmq
+    restart: unless-stopped
+    depends_on:
+      - rabbitmq
+      - postgres
+      - db-migrations
+
+  messages:
+    container_name: messages
+    build:
+      context: messages
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql://root:root@postgres:5432/nest
+      PORT: 4000
+      ALLOWED_ORIGIN: http://localhost:3000
+      SESSION_SECRET: secret
+      FRONTEND_URL: http://localhost:3000
+      RABBITMQ_URL: amqp://rabbitmq:5672
+    volumes:
+      - ./messages:/home/node/app
+      - backend-node_modules:/home/node/app/node_modules
+    ports:
+      - "4001:4001"
     networks:
       - postgres
       - rabbitmq

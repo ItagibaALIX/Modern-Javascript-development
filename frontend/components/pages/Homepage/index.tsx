@@ -7,6 +7,8 @@ import Layout from 'components/Layout';
 import TextInput from 'components/TextInput';
 import Button from 'components/Button';
 
+import useMessages from '../../../hooks/messages';
+
 export default Homepage;
 
 const useStyles = makeStyles((theme) => ({
@@ -50,17 +52,29 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Homepage(): JSX.Element {
-  const [lastMessage, setLastMessage] = useState('');
+  const sendMessage = useMessages();
+  const [messages, setMessages] = useState([]);
+  let socket = io('ws://localhost:4001');
 
-  const socket = io('ws://localhost:4000', {
-    autoConnect: true,
-  });
+  if (process.browser) {
+    socket = io(`ws://localhost:4001?token=${window.localStorage.getItem('token')}`, {
+      autoConnect: true,
+    });
 
-  console.log('socket', socket);
-  socket.on('msgToClient', (data) => {
-    setLastMessage(data);
-    console.log(data);
-  });
+    console.log('socket', socket);
+    socket.on('msgToClient', (data) => {
+      const msg = JSON.parse(data);
+      setMessages((msgs) => [...msgs,
+        <div>
+          <span>
+            <b>{msg.sender}</b>
+            {`:${msg.message}`}
+          </span>
+        </div>,
+      ]);
+      console.log(data);
+    });
+  }
 
   const classes = useStyles();
   const initialValues = { message: '' };
@@ -82,15 +96,14 @@ function Homepage(): JSX.Element {
             variant="subtitle1"
             className={classes.text}
           >
-            {lastMessage}
+            {messages}
           </Typography>
           <Formik
             initialValues={initialValues}
             // validationSchema={loginSchema}
-            onSubmit={(values: { message: string }): void => {
-              console.log('emit:', values.message);
-              socket.emit('msgToServer', values.message);
-            }}
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            onSubmit={(values: { message: string }): void => sendMessage(values)}
           >
             <Form noValidate className={classes.input}>
               <TextInput

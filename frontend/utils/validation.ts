@@ -16,3 +16,9 @@ export const registerSchema = Yup.object().shape({
 });
 
 export type RegisterParams = Yup.InferType<typeof registerSchema>;
+
+export const messageSendSchema = Yup.object().shape({
+  message: Yup.string().required('Username is required'),
+});
+
+export type MessageSendParams = Yup.InferType<typeof messageSendSchema>;
