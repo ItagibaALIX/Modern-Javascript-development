@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Login(): JSX.Element {
   const classes = useStyles();
   const user = useUser();
+
   const [infoUser, setInfoUser] = useState<User>();
   return (
     <div className={classes.container}>

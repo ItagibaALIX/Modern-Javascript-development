@@ -1,119 +1,220 @@
 import React, { useState } from 'react';
-import io from 'socket.io-client';
-import { makeStyles, Typography } from '@material-ui/core';
-import { Formik, Form } from 'formik';
+import { makeStyles, Paper, Typography } from '@material-ui/core';
+import Room from 'components/Room';
+import ChatBox from 'components/chatbox';
 
-import Layout from 'components/Layout';
-import TextInput from 'components/TextInput';
-import Button from 'components/Button';
-
+import RoomSettings from 'components/RoomSettings';
 export default Homepage;
 
 const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    height: '85vh',
+    width: '100%',
+    height: '100%',
+    maxHeight: '100%',
   },
-  formContainer: {
+  paddingPannel: {
+    padding: theme.spacing(1),
     display: 'flex',
-    maxHeight: '70%',
-    flex: 1,
+    flex: 0.2,
+    maxHeight: '93vh',
+    height: '93vh',
+  },
+  pannel: {
+    display: 'flex',
+    width: '100%',
     flexDirection: 'column',
+    maxHeight: '100%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    [theme.breakpoints.up('md')]: {
-      maxWidth: '50%',
-    },
+    borderRadius: theme.shape.borderRadius,
+    border: 'solid',
+    borderWidth: '1px',
+    borderColor: theme.palette.primary.main,
   },
-  input: {
+  containerChatBox: {
     display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
+    height: '100%',
+    maxHeight: '100%',
+    flex: 0.6,
     alignItems: 'center',
-    minHeight: 150,
-    minWidth: 320,
-    '& .MuiFormControl-root': {
-      marginBottom: theme.spacing(2),
-    },
-  },
-  text: {
-    display: 'flex',
     justifyContent: 'center',
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(5),
-    minWidth: 175,
-    fontSize: 24,
+  },
+  containerSettings: {
+    display: 'flex',
+    maxHeight: '100%',
+    height: '100%',
+    padding: theme.spacing(1),
+  },
+  paper: {
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.primary,
+    maxHeight: '100%',
+    height: '100%',
+    width: '100%',
+    overflowY: 'scroll',
+  },
+  rooms: {
+  },
+  subtitle: {
+    fontWeight: 800,
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(2),
   },
 }));
 
 function Homepage(): JSX.Element {
-  const [lastMessage, setLastMessage] = useState('');
-
-  const socket = io('ws://localhost:4000', {
-    autoConnect: true,
-  });
-
-  console.log('socket', socket);
-  socket.on('msgToClient', (data) => {
-    setLastMessage(data);
-    console.log(data);
-  });
-
   const classes = useStyles();
-  const initialValues = { message: '' };
+
+  const listRooms = rooms.map((r) => (
+    <div className={classes.rooms}>
+      <Room user={r.user} />
+    </div>
+  ));
 
   return (
-    <Layout>
-      <h1 className="title">
-        Modern Javascript development
-      </h1>
-      <div className={classes.container}>
-        <div className={classes.formContainer}>
-          <Typography
-            variant="h6"
-            className={classes.text}
-          >
-            Chat Box
+    <div className={classes.container}>
+      <div className={classes.paddingPannel}>
+        <div className={classes.pannel}>
+          <Typography variant="subtitle1" className={classes.subtitle}>
+            Chat Rooms:
           </Typography>
-          <Typography
-            variant="subtitle1"
-            className={classes.text}
-          >
-            {lastMessage}
-          </Typography>
-          <Formik
-            initialValues={initialValues}
-            // validationSchema={loginSchema}
-            onSubmit={(values: { message: string }): void => {
-              console.log('emit:', values.message);
-              socket.emit('msgToServer', values.message);
-            }}
-          >
-            <Form noValidate className={classes.input}>
-              <TextInput
-                type="text"
-                name="message"
-                label="message"
-                required
-                rows={3}
-                fullWidth
-                multiline
-              />
-              <Button
-                color="primary"
-                variant="contained"
-                type="submit"
-                fullWidth
-              >
-                Send
-              </Button>
-            </Form>
-          </Formik>
+          <div className={classes.paper}>
+            {listRooms}
+          </div>
         </div>
       </div>
-    </Layout>
+      <div className={classes.containerChatBox}>
+        <ChatBox />
+      </div>
+      <div className={classes.paddingPannel}>
+        <div className={classes.pannel}>
+          <Typography variant="subtitle1" className={classes.subtitle}>
+            Room settings:
+          </Typography>
+          <RoomSettings />
+        </div>
+      </div>
+    </div>
   );
 }
+
+const rooms = [
+  {
+    user: {
+      id: 1,
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+  {
+
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+  {
+
+    user: {
+      id: 1,
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
+  },
+  {
+
+    user: {
+      id: 1,
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 1,
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 1,
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 1,
+      username: 'Raphael',
+      email: 'raph@gmail.com',
+    },
+  },
+  {
+    user: {
+      id: 0,
+      username: 'Maxime',
+      email: 'max@gmail.com',
+    },
+  },
+];
