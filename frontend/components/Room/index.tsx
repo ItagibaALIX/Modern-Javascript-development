@@ -23,13 +23,13 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 
 export interface RoomProps {
   user: User;
-  roomName: string;
+  // roomName: string;
 }
 
 function Room(props: RoomProps): JSX.Element {
   const {
     user,
-    roomName = "The secret conv",
+    // roomName = "The secret conv",
   } = props;
   const styles = useStyles({ name: user?.username ?? '' });
 

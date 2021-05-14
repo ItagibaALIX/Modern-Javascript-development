@@ -8,6 +8,7 @@ import TextInput from 'components/TextInput';
 import PasswordInput from 'components/PasswordInput';
 import TextLink from 'components/TextLink';
 import Button from 'components/Button';
+import { useAuthContext } from 'components/Provider/Auth';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -59,6 +60,8 @@ export default function Register(): JSX.Element {
   const classes = useStyles();
   const initialValues: RegisterParams = { username: '', email: '', password: '' } as RegisterParams;
   const register = useRegister();
+  const { user } = useAuthContext();
+  console.log("user", user);
 
   return (
     <div className={classes.container}>
@@ -73,8 +76,10 @@ export default function Register(): JSX.Element {
           initialValues={initialValues}
           validationSchema={registerSchema}
           onSubmit={
-              (values: RegisterParams): void => {
-                register(values);
+                async (values: RegisterParams): Promise<void> => {
+                const user = await register(values);
+
+                localStorage.setItem('token', user.id);
               }
           }
         >

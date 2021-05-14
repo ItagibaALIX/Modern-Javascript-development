@@ -4,6 +4,7 @@ import { useUser } from 'hooks/auth';
 import { User } from 'types';
 
 import Button from 'components/Button';
+import { useAuthContext } from 'components/Provider/Auth';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -25,8 +26,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login(): JSX.Element {
   const classes = useStyles();
-  const user = useUser();
+  const userRefresh = useUser();
+  const { user, setUser } = useAuthContext();
 
+
+  console.log("user", user);
   const [infoUser, setInfoUser] = useState<User>();
   return (
     <div className={classes.container}>
@@ -41,7 +45,7 @@ export default function Login(): JSX.Element {
         variant="contained"
         type="button"
         onClick={async () => {
-          const info = await user();
+          const info = await userRefresh();
 
           setInfoUser(info);
         }}

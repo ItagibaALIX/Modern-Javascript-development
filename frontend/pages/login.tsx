@@ -8,6 +8,7 @@ import TextInput from 'components/TextInput';
 import PasswordInput from 'components/PasswordInput';
 import TextLink from 'components/TextLink';
 import Button from 'components/Button';
+import { useAuthContext } from 'components/Provider/Auth';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -63,6 +64,9 @@ export default function Login(): JSX.Element {
   const classes = useStyles();
   const initialValues: LoginParams = { email: '', password: '' } as LoginParams;
   const login = useLogin();
+  const { user, setUser } = useAuthContext();
+
+  console.log("user", user);
 
   return (
     <div className={classes.container}>
@@ -76,8 +80,11 @@ export default function Login(): JSX.Element {
         <Formik
           initialValues={initialValues}
           validationSchema={loginSchema}
-          onSubmit={(values: LoginParams): void => {
-            login(values);
+          onSubmit={async (values: LoginParams): Promise<void> => {
+            const user = await login(values);
+
+            console.log("user", user)
+            setUser(user);
           }}
         >
           <Form noValidate className={classes.input}>

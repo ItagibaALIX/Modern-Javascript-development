@@ -3,11 +3,11 @@ import axios from 'axios';
 import log from 'loglevel';
 import { LoginParams, RegisterParams } from 'utils/validation';
 
-export function useLogin(): (variables: LoginParams) => Promise<void> {
-  return (async ({ email, password }: LoginParams): Promise<void> => {
+export function useLogin(): (variables: LoginParams) => Promise<User> {
+  return (async ({ email, password }: LoginParams): Promise<User> => {
     try {
       log.debug('call Login');
-      await axios({
+      const data = await axios({
         method: 'post',
         url: 'http://localhost:4000/auth/login',
         timeout: 4000,
@@ -17,17 +17,20 @@ export function useLogin(): (variables: LoginParams) => Promise<void> {
         },
       });
       log.debug('Login success');
+
+      return data.data as unknown as User;
     } catch (err) {
+      
       log.error(new Error(`Login failed:${err}`));
     }
   });
 }
 
-export function useRegister(): (variables: RegisterParams) => Promise<void> {
-  return (async ({ username, email, password }: RegisterParams): Promise<void> => {
+export function useRegister(): (variables: RegisterParams) => Promise<User> {
+  return (async ({ username, email, password }: RegisterParams): Promise<User> => {
     try {
       log.debug('call Register');
-      await axios({
+      const data = await axios({
         method: 'post',
         url: 'http://localhost:4000/auth/register',
         timeout: 4000,
@@ -38,6 +41,8 @@ export function useRegister(): (variables: RegisterParams) => Promise<void> {
         },
       });
       log.debug('Register success');
+
+      return data.data as unknown as User;
     } catch (err) {
       log.error(new Error(`Register failed:${err}`));
     }

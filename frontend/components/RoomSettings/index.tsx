@@ -52,14 +52,14 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }));
 
 export interface RoomSettingsProps {
-  // user: User;
-  // roomName: string;
+  user: User;
+  roomName: string;
 }
 
 function RoomSettings(props: RoomSettingsProps): JSX.Element {
   const {
-    // user,
-    // roomName = "The secret conv",
+    user,
+    roomName = "The secret conv",
   } = props;
   const styles = useStyles({ name: user?.username ?? '' });
 
