@@ -7,6 +7,7 @@ import ButtonLink from 'components/ButtonLink';
 
 import MobileMenu from './MobileMenu';
 import UserCard from './UserCard';
+import { useUserContext } from 'components/Provider/User';
 
 const useStyles = makeStyles((theme) => ({
   menuIcon: {
@@ -22,7 +23,7 @@ function RightNav(): JSX.Element {
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'));
   const getUser = useUser();
   const classes = useStyles();
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useUserContext();
 
   useEffect(() => {
     getUser().then((newUser) => (

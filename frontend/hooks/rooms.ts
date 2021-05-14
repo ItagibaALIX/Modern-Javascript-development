@@ -2,7 +2,7 @@ import log from 'loglevel';
 import axios from 'axios';
 
 import { Room } from '../types';
-import { CreateRoomParams } from 'utils/validation';
+import { CreateRoomParams, InviteRoomParams } from 'utils/validation';
 
 export function useRooms(): () => Promise<[Room]> {
   return (async (): Promise<[Room] | null> => {
@@ -35,6 +35,31 @@ export function useCreateRoom(): (variables: CreateRoomParams) => Promise<void> 
         timeout: 4000,
         data: {
           name: name,
+        },
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem('token')}`,
+        },
+      });
+      log.debug('call Room (get) success');
+      return (resp.data);
+    } catch (err) {
+      log.error(new Error(`Room (get) failed:${err}`));
+      return null;
+    }
+  });
+}
+
+export function useInviteRoom(): (variables: InviteRoomParams) => Promise<void> {
+  return (async ({ id, email }: InviteRoomParams): Promise<void> => {
+    try {
+      log.debug('call Room (post)', id, email);
+
+      const resp = await axios({
+        method: 'post',
+        url: `http://localhost:4000/rooms/${id}/invite`,
+        timeout: 4000,
+        data: {
+          email: email,
         },
         headers: {
           Authorization: `Bearer ${window.localStorage.getItem('token')}`,

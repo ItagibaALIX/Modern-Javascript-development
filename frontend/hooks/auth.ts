@@ -1,7 +1,7 @@
 import { User } from 'types';
 import axios from 'axios';
 import log from 'loglevel';
-import { LoginParams, RegisterParams } from 'utils/validation';
+import { FindUserParams, LoginParams, RegisterParams } from 'utils/validation';
 
 export function useLogin(): (variables: LoginParams) => Promise<void> {
   return (async ({ email, password }: LoginParams): Promise<void> => {
@@ -54,6 +54,30 @@ export function useUser(): () => Promise<User> {
         method: 'get',
         url: 'http://localhost:4000/users/me',
         timeout: 4000,
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem('token')}`,
+        },
+      });
+      log.debug('call User (me) success');
+      return (resp.data);
+    } catch (err) {
+      log.error(new Error(`User (me) failed:${err}`));
+      return (null);
+    }
+  });
+}
+
+export function useFindUser(): (variables: FindUserParams) => Promise<[FindUserParams] | null> {
+  return (async ({ email }: FindUserParams): Promise<[FindUserParams] | null> => {
+    try {
+      log.debug('call User (me)');
+      const resp = await axios({
+        method: 'get',
+        url: 'http://localhost:4000/users/',
+        timeout: 4000,
+        data: {
+          email: email,
+        },
         headers: {
           Authorization: `Bearer ${window.localStorage.getItem('token')}`,
         },

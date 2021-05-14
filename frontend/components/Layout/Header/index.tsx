@@ -22,8 +22,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextInput from 'components/TextInput';
 import { Formik, Form } from 'formik';
 import Button from 'components/Button';
-import { useCreateRoom } from 'hooks/rooms';
-import { CreateRoomParams, createRommSchema } from 'utils/validation';
+import { useCreateRoom, useRooms } from 'hooks/rooms';
+import { CreateRoomParams, createRoomSchema } from 'utils/validation';
+import { useMessageContext } from 'components/Provider/Message';
+import { useUserContext } from 'components/Provider/User';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -76,7 +78,7 @@ function Header(): JSX.Element {
   const classes = useStyles();
   const elevationTrigger = useScrollTrigger({ threshold: 10, disableHysteresis: true });
   const getUser = useUser();
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useUserContext();
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -133,8 +135,10 @@ function Header(): JSX.Element {
 export default Header;
 
 function CreateRoomDialogue(props) {
-  const { handleClickOpen, handleClose, open } = props;
+  const { handleClose, open } = props;
   const createRoom = useCreateRoom();
+  const getRooms = useRooms();
+  const { setRooms } = useMessageContext();
 
   return (
     <div>
@@ -143,11 +147,18 @@ function CreateRoomDialogue(props) {
         <DialogContent>
           <Formik
             initialValues={{ name: '' }}
-            validationSchema={createRommSchema}
+            validationSchema={createRoomSchema}
             onSubmit={
-              (values: CreateRoomParams): void => {
+              async (values: CreateRoomParams): Promise<void> => {
                 console.log("create room:", values)
-                createRoom(values);
+                await createRoom(values);
+                getRooms().then((userRooms) => {
+                  if (userRooms == null) {
+                    return;
+                  }
+                  setRooms(() => userRooms);
+                });
+                handleClose();
               }
             }
           >

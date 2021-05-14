@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import Popper from '@material-ui/core/Popper';
 import Grow from '@material-ui/core/Grow';
@@ -12,6 +12,7 @@ import { useUser } from 'hooks/auth';
 
 import MenuItemLink from 'components/Layout/Header/RightNav/UserCard/MenuItemLink';
 import Avatar from 'components/Avatar';
+import { useUserContext } from 'components/Provider/User';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -59,7 +60,16 @@ function UserCard(): JSX.Element {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
   const classes = useStyles();
-  const user = useUser();
+  const getUser = useUser();
+  const { user, setUser } = useUserContext();
+
+  useEffect(() => {
+    getUser().then((newUser) => (
+      setUser(newUser)
+    )).catch((e) => {
+      console.log(e);
+    });
+  }, []);
 
   if (!user) {
     return null;

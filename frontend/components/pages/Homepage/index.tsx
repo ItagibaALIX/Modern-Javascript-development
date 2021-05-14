@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles, Paper, Typography } from '@material-ui/core';
 
-import RoomType from '../../../types/index'
-import Room from 'components/Room';
+import RoomBox from 'components/RoomBox';
 import ChatBox from 'components/chatbox';
 import RoomSettings from 'components/RoomSettings';
 
 import { useRooms } from '../../../hooks/rooms';
+import { useMessageContext } from 'components/Provider/Message';
+import { useUserContext } from 'components/Provider/User';
 
 export default Homepage;
 
@@ -52,13 +53,17 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
   paper: {
+    display: "flex",
     padding: theme.spacing(1),
     textAlign: 'center',
+    flexDirection: 'column',
     color: theme.palette.text.primary,
     maxHeight: '100%',
     height: '100%',
     width: '100%',
     overflowY: 'scroll',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
   rooms: {
   },
@@ -71,7 +76,8 @@ const useStyles = makeStyles((theme) => ({
 
 function Homepage(): JSX.Element {
   const classes = useStyles();
-  const [rooms, setRooms] = useState<[RoomType]>([]);
+  const { rooms, setRooms, currentRoom } = useMessageContext();
+  const { user } = useUserContext();
   const getRooms = useRooms();
 
   useEffect(() => {
@@ -86,7 +92,7 @@ function Homepage(): JSX.Element {
   console.log({ rooms });
   const listRooms = rooms.map((r) => (
     <div className={classes.rooms}>
-      <Room roomName={r.name} user={{ id: '1', username: 'a', email: '2' }} />
+      <RoomBox room={r} user={user} />
     </div>
   ));
 
@@ -103,7 +109,7 @@ function Homepage(): JSX.Element {
         </div>
       </div>
       <div className={classes.containerChatBox}>
-        <ChatBox />
+        {currentRoom ? <ChatBox /> : <></> }
       </div>
       <div className={classes.paddingPannel}>
         <div className={classes.pannel}>
