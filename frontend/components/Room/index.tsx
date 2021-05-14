@@ -2,6 +2,7 @@ import { Typography, Avatar as MuiAvatar } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
 import Avatar from 'components/Avatar';
+import { useMessageContext } from 'components/Provider/Message';
 
 import { User } from '../../types';
 
@@ -32,9 +33,11 @@ function Room(props: RoomProps): JSX.Element {
     roomName = 'The secret conv',
   } = props;
   const styles = useStyles({ name: user?.username ?? '' });
+  const { setCurrentRoom } = useMessageContext();
 
   const onClick = () => {
-    console.log('click click');
+    setCurrentRoom(roomName);
+    // console.log('click click');
   };
 
   return (
