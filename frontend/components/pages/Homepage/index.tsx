@@ -6,7 +6,7 @@ import Room from 'components/Room';
 import ChatBox from 'components/chatbox';
 import RoomSettings from 'components/RoomSettings';
 
-import useRooms from '../../../hooks/rooms';
+import { useRooms } from '../../../hooks/rooms';
 
 export default Homepage;
 

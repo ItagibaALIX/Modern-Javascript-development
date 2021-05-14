@@ -22,3 +22,9 @@ export const messageSendSchema = Yup.object().shape({
 });
 
 export type MessageSendParams = Yup.InferType<typeof messageSendSchema>;
+
+export const createRoomSchema = Yup.object().shape({
+  name: Yup.string().required('room name is required'),
+});
+
+export type CreateRoomParams = Yup.InferType<typeof createRoomSchema>;

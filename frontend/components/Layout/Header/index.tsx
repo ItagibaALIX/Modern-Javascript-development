@@ -12,6 +12,19 @@ import Logo from 'components/Logo';
 import { useUser } from 'hooks/auth';
 import { useState, useEffect } from 'react';
 
+import React from 'react';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextInput from 'components/TextInput';
+import { Formik, Form } from 'formik';
+import Button from 'components/Button';
+import { useCreateRoom } from 'hooks/rooms';
+import { CreateRoomParams, createRommSchema } from 'utils/validation';
+
 const useStyles = makeStyles((theme) => ({
   appBar: {
     display: 'flex',
@@ -46,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'left',
     margin: '0px 4px',
   },
-  addRoomButton: {
+  addRoomButton: {
     width: '150px',
     height: '40px',
     borderRadius: '7px',
@@ -64,6 +77,16 @@ function Header(): JSX.Element {
   const elevationTrigger = useScrollTrigger({ threshold: 10, disableHysteresis: true });
   const getUser = useUser();
   const [user, setUser] = useState(null);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  // const createRoom = () => {console.log("toto")};
 
   useEffect(() => {
     getUser().then((newUser) => (
@@ -89,17 +112,76 @@ function Header(): JSX.Element {
         </Hidden>
         {
           user ?
-          <Fab color="primary" aria-label="add" className={classes.addRoomButton}>
-            <Typography variant="subtitle1" className={classes.textAddRoomButton}>
-              New room
+            <Fab color="primary" aria-label="add" className={classes.addRoomButton} onClick={handleClickOpen}>
+              <Typography variant="subtitle1" className={classes.textAddRoomButton}>
+                New room
             </Typography>
-            <AddIcon />
-          </Fab> : <></>
+              <AddIcon />
+            </Fab> : <></>
         }
         <RightNav />
       </Toolbar>
+      <CreateRoomDialogue
+        handleClickOpen={handleClickOpen}
+        handleClose={handleClose}
+        open={open}
+      />
     </AppBar>
   );
 }
 
 export default Header;
+
+function CreateRoomDialogue(props) {
+  const { handleClickOpen, handleClose, open } = props;
+  const createRoom = useCreateRoom();
+
+  return (
+    <div>
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Create Room</DialogTitle>
+        <DialogContent>
+          <Formik
+            initialValues={{ name: '' }}
+            validationSchema={createRommSchema}
+            onSubmit={
+              (values: CreateRoomParams): void => {
+                console.log("create room:", values)
+                createRoom(values);
+              }
+            }
+          >
+            <Form noValidate>
+              <TextInput
+                type="text"
+                name="name"
+                label="room name"
+                required
+                fullWidth
+              />
+              <DialogActions>
+                <Button
+                  color="primary"
+                  variant="outlined"
+                  type="button"
+                  fullWidth
+                  onClick={handleClose}
+                >
+                  Cancel
+              </Button>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  type="submit"
+                  fullWidth
+                >
+                  Create
+              </Button>
+              </DialogActions>
+            </Form>
+          </Formik>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}

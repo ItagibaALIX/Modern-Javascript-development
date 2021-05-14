@@ -2,8 +2,9 @@ import log from 'loglevel';
 import axios from 'axios';
 
 import { Room } from '../types';
+import { CreateRoomParams } from 'utils/validation';
 
-export default function useRooms(): () => Promise<[Room]> {
+export function useRooms(): () => Promise<[Room]> {
   return (async (): Promise<[Room] | null> => {
     try {
       log.debug('call Room (get)');
@@ -11,6 +12,30 @@ export default function useRooms(): () => Promise<[Room]> {
         method: 'get',
         url: 'http://localhost:4000/rooms',
         timeout: 4000,
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem('token')}`,
+        },
+      });
+      log.debug('call Room (get) success');
+      return (resp.data);
+    } catch (err) {
+      log.error(new Error(`Room (get) failed:${err}`));
+      return null;
+    }
+  });
+}
+
+export function useCreateRoom(): (variables: CreateRoomParams) => Promise<void> {
+  return (async ({ name }: CreateRoomParams): Promise<void> => {
+    try {
+      log.debug('call Room (post)', name);
+      const resp = await axios({
+        method: 'post',
+        url: 'http://localhost:4000/rooms',
+        timeout: 4000,
+        data: {
+          name: name,
+        },
         headers: {
           Authorization: `Bearer ${window.localStorage.getItem('token')}`,
         },
