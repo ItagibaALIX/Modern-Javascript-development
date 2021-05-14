@@ -7,6 +7,7 @@ import { User } from '@prisma/client';
 export class UsersController {
   @Get('me')
   async post(@Request() req): Promise<User> {
+    console.log('/users/me')
     return req.user
   }
 }

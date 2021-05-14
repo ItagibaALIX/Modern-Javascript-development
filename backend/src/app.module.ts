@@ -8,6 +8,7 @@ import { RoomsModule } from './rooms/rooms.module';
 import { MessagesModule } from './messages/messages.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { MessagesController } from './messages/messages.controller';
+import { RoomsController } from "./rooms/rooms.controller";
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { MessagesController } from './messages/messages.controller';
     RoomsModule,
     MessagesModule,
   ],
-  controllers: [AppController, UsersController, MessagesController],
+  controllers: [AppController, UsersController, MessagesController, RoomsController],
   providers: [],
 })
 export class AppModule {}

@@ -1,132 +1,118 @@
-import React, { useState } from 'react';
-import io from 'socket.io-client';
-import { makeStyles, Typography } from '@material-ui/core';
-import { Formik, Form } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { makeStyles, Paper, Typography } from '@material-ui/core';
 
-import Layout from 'components/Layout';
-import TextInput from 'components/TextInput';
-import Button from 'components/Button';
+import RoomType from '../../../types/index'
+import Room from 'components/Room';
+import ChatBox from 'components/chatbox';
+import RoomSettings from 'components/RoomSettings';
 
-import useMessages from '../../../hooks/messages';
+import useRooms from '../../../hooks/rooms';
 
 export default Homepage;
 
 const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    height: '85vh',
+    width: '100%',
+    height: '100%',
+    maxHeight: '100%',
   },
-  formContainer: {
+  paddingPannel: {
+    padding: theme.spacing(1),
     display: 'flex',
-    maxHeight: '70%',
-    flex: 1,
+    flex: 0.2,
+    maxHeight: '93vh',
+    height: '93vh',
+  },
+  pannel: {
+    display: 'flex',
+    width: '100%',
     flexDirection: 'column',
+    maxHeight: '100%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    [theme.breakpoints.up('md')]: {
-      maxWidth: '50%',
-    },
+    borderRadius: theme.shape.borderRadius,
+    border: 'solid',
+    borderWidth: '1px',
+    borderColor: theme.palette.primary.main,
   },
-  input: {
+  containerChatBox: {
     display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
+    height: '100%',
+    maxHeight: '100%',
+    flex: 0.6,
     alignItems: 'center',
-    minHeight: 150,
-    minWidth: 320,
-    '& .MuiFormControl-root': {
-      marginBottom: theme.spacing(2),
-    },
-  },
-  text: {
-    display: 'flex',
     justifyContent: 'center',
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(5),
-    minWidth: 175,
-    fontSize: 24,
+  },
+  containerSettings: {
+    display: 'flex',
+    maxHeight: '100%',
+    height: '100%',
+    padding: theme.spacing(1),
+  },
+  paper: {
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.primary,
+    maxHeight: '100%',
+    height: '100%',
+    width: '100%',
+    overflowY: 'scroll',
+  },
+  rooms: {
+  },
+  subtitle: {
+    fontWeight: 800,
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(2),
   },
 }));
 
 function Homepage(): JSX.Element {
-  const sendMessage = useMessages();
-  const [messages, setMessages] = useState([]);
-  let socket = io('ws://localhost:4001');
-
-  if (process.browser) {
-    socket = io(`ws://localhost:4001?token=${window.localStorage.getItem('token')}`, {
-      autoConnect: true,
-    });
-
-    console.log('socket', socket);
-    socket.on('msgToClient', (data) => {
-      const msg = JSON.parse(data);
-      setMessages((msgs) => [...msgs,
-        <div>
-          <span>
-            <b>{msg.sender}</b>
-            {`:${msg.message}`}
-          </span>
-        </div>,
-      ]);
-      console.log(data);
-    });
-  }
-
   const classes = useStyles();
-  const initialValues = { message: '' };
+  const [rooms, setRooms] = useState<[RoomType]>([]);
+  const getRooms = useRooms();
+
+  useEffect(() => {
+    getRooms().then((room) => {
+      if (room == null) {
+        return;
+      }
+      setRooms([room]);
+    });
+  }, []);
+
+  console.log({ rooms });
+  const listRooms = rooms.map((r) => (
+    <div className={classes.rooms}>
+      <Room roomName={r.name} user={{ id: '1', username: 'a', email: '2' }} />
+    </div>
+  ));
 
   return (
-    <Layout>
-      <h1 className="title">
-        Modern Javascript development
-      </h1>
-      <div className={classes.container}>
-        <div className={classes.formContainer}>
-          <Typography
-            variant="h6"
-            className={classes.text}
-          >
-            Chat Box
+    <div className={classes.container}>
+      <div className={classes.paddingPannel}>
+        <div className={classes.pannel}>
+          <Typography variant="subtitle1" className={classes.subtitle}>
+            Chat Rooms:
           </Typography>
-          <Typography
-            variant="subtitle1"
-            className={classes.text}
-          >
-            {messages}
-          </Typography>
-          <Formik
-            initialValues={initialValues}
-            // validationSchema={loginSchema}
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            onSubmit={(values: { message: string }): void => sendMessage(values)}
-          >
-            <Form noValidate className={classes.input}>
-              <TextInput
-                type="text"
-                name="message"
-                label="message"
-                required
-                rows={3}
-                fullWidth
-                multiline
-              />
-              <Button
-                color="primary"
-                variant="contained"
-                type="submit"
-                fullWidth
-              >
-                Send
-              </Button>
-            </Form>
-          </Formik>
+          <div className={classes.paper}>
+            {listRooms}
+          </div>
         </div>
       </div>
-    </Layout>
+      <div className={classes.containerChatBox}>
+        <ChatBox />
+      </div>
+      <div className={classes.paddingPannel}>
+        <div className={classes.pannel}>
+          <Typography variant="subtitle1" className={classes.subtitle}>
+            Room settings:
+          </Typography>
+          <RoomSettings />
+        </div>
+      </div>
+    </div>
   );
 }
