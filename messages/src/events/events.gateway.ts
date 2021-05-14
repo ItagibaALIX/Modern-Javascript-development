@@ -1,16 +1,15 @@
 import {
-  SubscribeMessage,
-  WebSocketGateway,
-  OnGatewayInit,
-  WebSocketServer,
   OnGatewayConnection,
   OnGatewayDisconnect,
+  OnGatewayInit,
+  WebSocketGateway,
+  WebSocketServer,
 } from '@nestjs/websockets';
-import { Logger, UseGuards } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import * as Amqp from 'amqp-ts';
-import { Socket, Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { AuthService } from '../auth/auth.service';
-import { emit } from 'cluster';
+import { EventsService } from './events.service';
 
 @WebSocketGateway()
 export class EventsGateway
@@ -18,11 +17,14 @@ export class EventsGateway
 {
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('EventsGateway');
-  private users: { [key: string]: { mail: string; queue: Amqp.Queue } } = {};
-  private queues: { [key: string]: Amqp.Queue } = {};
+  private users: { [key: string]: string } = {};
+  private queues: { [key: string]: Amqp.Queue[] } = {};
   private conn: Amqp.Connection;
 
-  constructor(private authService: AuthService) {
+  constructor(
+    private authService: AuthService,
+    private eventService: EventsService,
+  ) {
     this.conn = new Amqp.Connection(process.env.RABBITMQ_URL);
   }
 
@@ -30,14 +32,39 @@ export class EventsGateway
     this.logger.log('Init');
   }
 
-  handleDisconnect(client: Socket) {
-    this.logger.log(
-      `Client disconnected: ${client.id}`,
-    );
-    delete this.users[client.id];
+  async handleDisconnect(client: Socket) {
+    this.logger.log(`Client disconnected: ${client.id}`);
+    const userId = this.users[client.id];
+    if (!Object.values(this.users).find((uid) => userId === uid)) {
+      const queues = this.queues[userId];
+      await Promise.all(queues.map((q) => q.delete()));
+      delete this.queues[userId];
+    }
   }
 
-  async handleConnection(client: Socket, ...args: any[]) {
+  async connectToUserRooms(userId: string) {
+    const rooms = await this.eventService.getUserRooms(userId);
+    this.queues[userId] = await Promise.all(
+      rooms.map(async (room) => {
+        const exchange = this.conn.declareExchange(room.id, 'fanout');
+        const queue = this.conn.declareQueue(userId);
+        await queue.bind(exchange);
+        await queue.activateConsumer((message) => {
+          console.log('Message received: ' + message.getContent());
+          this.server.emit(
+            'msgToClient',
+            JSON.stringify({
+              room: room.id,
+              ...JSON.parse(message.getContent()),
+            }),
+          );
+        });
+        return queue;
+      }),
+    );
+  }
+
+  async handleConnection(client: Socket) {
     if (!client.handshake.query.token) {
       return;
     }
@@ -45,19 +72,9 @@ export class EventsGateway
       client.handshake.query.token as string,
     );
     this.logger.log(`Client connected: ${user.email} as ${client.id}`);
-    let queue: Amqp.Queue;
-    if (this.queues[user.email] == null) {
-      const exchange = this.conn.declareExchange('TEST', 'fanout');
-      queue = this.conn.declareQueue(user.email);
-      await queue.bind(exchange);
-      await queue.activateConsumer((message) => {
-        console.log('Message received: ' + message.getContent());
-        this.server.emit('msgToClient', message.getContent());
-      });
-    } else {
-      queue = this.queues[user.email];
+    if (this.queues[user.id] == null) {
+      await this.connectToUserRooms(user.id);
     }
-    this.users[client.id] = { mail: user.email, queue: queue };
-    this.queues[user.email] = queue;
+    this.users[client.id] = user.id;
   }
 }
