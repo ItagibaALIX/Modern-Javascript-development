@@ -75,11 +75,11 @@ function Homepage(): JSX.Element {
   const getRooms = useRooms();
 
   useEffect(() => {
-    getRooms().then((room) => {
-      if (room == null) {
+    getRooms().then((userRooms) => {
+      if (userRooms == null) {
         return;
       }
-      setRooms([room]);
+      setRooms(() => userRooms);
     });
   }, []);
 

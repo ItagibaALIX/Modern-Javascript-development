@@ -3,8 +3,8 @@ import axios from 'axios';
 
 import { Room } from '../types';
 
-export default function useRooms(): () => Promise<Room> {
-  return (async (): Promise<Room | null> => {
+export default function useRooms(): () => Promise<[Room]> {
+  return (async (): Promise<[Room] | null> => {
     try {
       log.debug('call Room (get)');
       const resp = await axios({
