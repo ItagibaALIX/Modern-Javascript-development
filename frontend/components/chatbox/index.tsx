@@ -20,9 +20,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-
-
-
 function ChatBox(): JSX.Element {
   const classes = useStyles();
 

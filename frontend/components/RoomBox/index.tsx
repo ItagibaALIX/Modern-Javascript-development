@@ -56,7 +56,7 @@ function RoomBox(props: RoomProps): JSX.Element {
 
   const onClick = () => {
     setCurrentRoom(room);
-    console.log("roomSelected", room.name);
+    console.log("roomSelected", room.name, room.id);
   };
 
   return (

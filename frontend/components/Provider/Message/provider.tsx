@@ -18,34 +18,36 @@ function MessageProvider(props) {
   // }
   // window.localStorage.setItem('messages', []);
 
+  console.log("messages refresh ?", messages)
+
   useEffect(() => {
     if (user) {
       const socket = io(`ws://localhost:4001?token=${window.localStorage.getItem('token')}`, {
         autoConnect: true,
       });
-      console.debug("socket:", socket, " user id:", user.id);
-      if (!messages) {
-        const localMessage = window.localStorage.getItem('messages');
-        if (localMessage) {
-          setMessages(JSON.parse(localMessage));
-        }
-      }
+      console.log("socket:", socket, "user id:", );
+      // if (!messages) {
+      //   const localMessage = window.localStorage.getItem('messages');
+      //   if (localMessage) {
+      //     setMessages(JSON.parse(localMessage));
+      //   }
+      // }
       socket.on(user.id, (data) => {
         console.log(user.id, JSON.parse(data));
         if (messages) {
           messages.push(JSON.parse(data));
           setMessages(messages);
-          window.localStorage.setItem('messages', JSON.stringify(messages));
+          // window.localStorage.setItem('messages', JSON.stringify(messages));
         } else {
           setMessages([JSON.parse(data)]);
-          window.localStorage.setItem('messages', JSON.stringify([JSON.parse(data)]));
+          // window.localStorage.setItem('messages', JSON.stringify([JSON.parse(data)]));
         }
       });
       return (() => {
         socket.close();
       })
     }
-  }, [messages, setMessages, user])
+  }, [ user, messages, setMessages])
 
   return (
     <MessageContext.Provider value={{

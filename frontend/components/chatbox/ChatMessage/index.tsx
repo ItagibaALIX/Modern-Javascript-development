@@ -109,10 +109,12 @@ function ChatMessage(): JSX.Element {
   const classes = useStyles({ isMyMessage: true});
   const { messages, currentRoom } = useMessageContext();
 
+  console.log("messages", messages);
   const messagesFormated = messages.map((message, idx) => {
     console.log(currentRoom.id, message.room);
     const filterRoom = currentRoom.id.localeCompare(message.room)
 
+    // console.log("filterRoom", filterRoom)
     if (filterRoom) {
       return (
         <div key={JSON.stringify(message) + idx}></div>
