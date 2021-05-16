@@ -37,6 +37,8 @@ export default function Me(): JSX.Element {
     });
   }, []);
 
+  if (!user) return (<></>) 
+
   return (
     <div className={classes.container}>
       <Typography

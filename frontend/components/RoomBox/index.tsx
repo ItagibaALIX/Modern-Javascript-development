@@ -54,11 +54,9 @@ function RoomBox(props: RoomProps): JSX.Element {
   const { currentRoom, setCurrentRoom } = useMessageContext();
   const roomSelected = room.name.localeCompare(currentRoom?.name);
 
-  console.log("roomSelected", roomSelected);
-
   const onClick = () => {
     setCurrentRoom(room);
-    // console.log('click click');
+    console.log("roomSelected", room.name);
   };
 
   return (

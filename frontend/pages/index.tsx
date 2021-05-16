@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 export default function Home(): JSX.Element {
   const { user } = useUserContext();
   const classes = useStyles();
@@ -32,8 +31,7 @@ export default function Home(): JSX.Element {
   return (
     <Layout>
       <Head title="Modern Javascript development" />
-      <Homepage />
-      {/* { 
+      { 
       user ? 
       (<Homepage />) :
       <div className={classes.container}>
@@ -44,7 +42,7 @@ export default function Home(): JSX.Element {
           Please Login or sign up to use MDJ
         </Typography>
       </div>
-    } */}
+    }
     </Layout>
   );
 }

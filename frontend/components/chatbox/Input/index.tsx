@@ -49,8 +49,8 @@ function Input(): JSX.Element {
         initialValues={initialValues}
         validationSchema={messageSendSchema}
         onSubmit={(values: MessageSendParams): void => {
-          console.debug("values message", values)
-          sendMessage(values);
+          console.log("currentRoom.id", currentRoom.id, currentRoom.name);
+          sendMessage({ room: currentRoom.id, message: values.message } as MessageSendParams);
         }}
       >
         <Form noValidate className={classes.containerInput}>

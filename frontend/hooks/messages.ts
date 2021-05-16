@@ -6,6 +6,7 @@ import { MessageSendParams } from '../utils/validation';
 export default function useMessages(): (variables: MessageSendParams) => Promise<void> {
   return (async ({ message, room }: MessageSendParams): Promise<void> => {
     try {
+      console.log('useMessages', message, room);
       log.debug('call Send', message, room);
       await axios({
         method: 'post',

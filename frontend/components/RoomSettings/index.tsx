@@ -76,7 +76,7 @@ function RoomSettings(): JSX.Element {
                 await invite(values);
               }}
             >
-              <Form noValidate className={styles.input}>
+              <Form noValidate>
                 <div className={styles.button}>
                   <Typography variant="subtitle1" className={styles.roomName}>
                     Add member:

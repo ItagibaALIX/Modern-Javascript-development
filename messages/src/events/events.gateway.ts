@@ -52,7 +52,7 @@ export class EventsGateway
         await queue.activateConsumer((message) => {
           console.log('Message received: ' + message.getContent());
           this.server.emit(
-            'msgToClient',
+            userId,
             JSON.stringify({
               room: room.id,
               ...JSON.parse(message.getContent()),

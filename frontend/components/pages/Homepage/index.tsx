@@ -85,13 +85,13 @@ function Homepage(): JSX.Element {
       if (userRooms == null) {
         return;
       }
+      console.debug("userRooms", userRooms);
       setRooms(() => userRooms);
     });
   }, []);
 
-  console.log({ rooms });
   const listRooms = rooms.map((r) => (
-    <div className={classes.rooms}>
+    <div className={classes.rooms} key={JSON.stringify(r)}>
       <RoomBox room={r} user={user} />
     </div>
   ));

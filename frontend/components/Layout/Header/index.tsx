@@ -91,11 +91,13 @@ function Header(): JSX.Element {
   // const createRoom = () => {console.log("toto")};
 
   useEffect(() => {
-    getUser().then((newUser) => (
-      setUser(newUser)
-    )).catch((e) => {
-      console.log(e);
-    });
+    if (!user) {
+      getUser().then((newUser) => (
+        setUser(newUser)
+      )).catch((e) => {
+        console.log(e);
+      });
+    }
   }, []);
 
   return (

@@ -26,14 +26,16 @@ function RightNav(): JSX.Element {
   const { user, setUser } = useUserContext();
 
   useEffect(() => {
-    getUser().then((newUser) => (
-      setUser(newUser)
-    )).catch((e) => {
-      console.log(e);
-    });
+    if (!user) {
+      getUser().then((newUser) => {
+        console.log('user', newUser);
+        setUser(newUser)
+      }).catch((e) => {
+        console.log(e);
+      });
+    }
   }, []);
 
-  console.log('user', user);
 
   if (isMobile) {
     return (

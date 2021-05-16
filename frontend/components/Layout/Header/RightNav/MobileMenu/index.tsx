@@ -51,11 +51,13 @@ function MobileMenu(): JSX.Element {
   const { user, setUser } = useUserContext();
 
   useEffect(() => {
-    getUser().then((newUser) => (
-      setUser(newUser)
-    )).catch((e) => {
-      console.log(e);
-    });
+    if (!user) {
+      getUser().then((newUser) => (
+        setUser(newUser)
+      )).catch((e) => {
+        console.log(e);
+      });
+    }
   }, []);
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>): void => {
