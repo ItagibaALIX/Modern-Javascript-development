@@ -121,6 +121,7 @@ function ChatMessage(): JSX.Element {
     console.log(currentRoom.id, message.room);
     const filterRoom = currentRoom.id.localeCompare(message.room);
 
+    console.log("Room:", currentRoom, message);
     if (filterRoom) {
       return (
         <div key={JSON.stringify(message) + idx} />

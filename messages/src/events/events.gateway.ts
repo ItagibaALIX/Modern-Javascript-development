@@ -35,33 +35,39 @@ export class EventsGateway
   async handleDisconnect(client: Socket) {
     this.logger.log(`Client disconnected: ${client.id}`);
     const userId = this.users[client.id];
-    if (!Object.values(this.users).find((uid) => userId === uid)) {
-      const queues = this.queues[userId];
-      await Promise.all(queues.map((q) => q.delete()));
-      delete this.queues[userId];
-    }
+    delete this.users[client.id];
+    try {
+      if (!Object.values(this.users).find((uid) => userId === uid)) {
+        const queues = this.queues[userId];
+        await Promise.all(queues.map((q) => q.delete()));
+        delete this.queues[userId];
+      }
+    } catch {}
   }
 
   async connectToUserRooms(userId: string) {
     const rooms = await this.eventService.getUserRooms(userId);
+    this.logger.log(`Rooms ${JSON.stringify(rooms)} `);
+    const queue = this.conn.declareQueue(userId);
+
     this.queues[userId] = await Promise.all(
       rooms.map(async (room) => {
         const exchange = this.conn.declareExchange(room.id, 'fanout');
-        const queue = this.conn.declareQueue(userId);
         await queue.bind(exchange);
-        await queue.activateConsumer((message) => {
-          console.log('Message received: ' + message.getContent());
-          this.server.emit(
-            userId,
-            JSON.stringify({
-              room: room.id,
-              ...JSON.parse(message.getContent()),
-            }),
-          );
-        });
+      
+        this.logger.log(`connected user id ${userId} to room ${room.id} `);
         return queue;
       }),
     );
+    await queue.activateConsumer((message) => {
+      console.log('Message received: ' + message.getContent());
+      this.server.emit(
+        userId,
+        JSON.stringify({
+          ...JSON.parse(message.getContent()),
+        }),
+      );
+    });
   }
 
   async handleConnection(client: Socket) {
@@ -71,10 +77,16 @@ export class EventsGateway
     const user = await this.authService.verify(
       client.handshake.query.token as string,
     );
-    this.logger.log(`Client connected: ${user.email} as ${client.id}`);
+    this.logger.log(`Client connected: ${user.email} user id: ${user.id}  as ${client.id}`);
     if (this.queues[user.id] == null) {
-      await this.connectToUserRooms(user.id);
+      try {
+        await this.connectToUserRooms(user.id);
+
+      } catch (e) {
+        this.logger.log(`handleConnection ERROR: ${e}`);
+      }
     }
     this.users[client.id] = user.id;
   }
+
 }

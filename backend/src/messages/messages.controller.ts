@@ -27,6 +27,6 @@ export class MessagesController {
     }
     console.log(`Sending message from ${req.user.id} to ${sendMessageData.room}`);
     const exchange = this.conn.declareExchange(sendMessageData.room, "fanout");
-    exchange.send(new Amqp.Message(JSON.stringify({ sender: req.user.username, message: req.body.message })))
+    exchange.send(new Amqp.Message(JSON.stringify({ sender: req.user.username, message: req.body.message, room: sendMessageData.room })))
   }
 }

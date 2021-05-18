@@ -66,6 +66,7 @@ function RoomSettings(): JSX.Element {
               initialValues={{ email: '', id: currentRoom.id }}
               validationSchema={inviteRoomSchema}
               onSubmit={async (values: InviteRoomParams): Promise<void> => {
+                values.id = currentRoom.id;
                 console.log('onSubmit invite', values);
                 await invite(values);
               }}
