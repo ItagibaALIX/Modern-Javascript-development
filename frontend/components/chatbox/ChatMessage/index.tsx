@@ -106,6 +106,16 @@ function ChatMessage(): JSX.Element {
   const classes = useStyles({ isMyMessage: true });
   const { messages, currentRoom } = useMessageContext();
 
+  if (!messages) {
+    return (
+      <div className={classes.container}>
+      <div className={classes.formContainer}>
+        <></>
+      </div>
+    </div>
+    )
+  }
+
   console.log('messages', messages);
   const messagesFormated = messages.map((message, idx) => {
     console.log(currentRoom.id, message.room);

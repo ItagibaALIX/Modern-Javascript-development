@@ -50,4 +50,4 @@ exports.chatRoomInvite = (user, chatroom) => {
     })
 }
 
-registerConfirmation({ firstname: "Raphael", lastname: "Maisonnave", email: "mraphaem@gmail.com" }, "youtube.com")
+// registerConfirmation({ firstname: "Raphael", lastname: "Maisonnave", email: "mraphaem@gmail.com" }, "youtube.com")
