@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
 import { useUser } from 'hooks/auth';
-import { User } from 'types';
 
-import Button from 'components/Button';
+import { useUserContext } from 'components/Provider/User';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -23,31 +22,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Login(): JSX.Element {
+export default function Me(): JSX.Element {
   const classes = useStyles();
-  const user = useUser();
+  const getUser = useUser();
+  const { user, setUser } = useUserContext();
 
-  const [infoUser, setInfoUser] = useState<User>();
+  useEffect(() => {
+    getUser().then((newUser) => (
+      setUser(newUser)
+    )).catch((e) => {
+      console.log(e);
+    });
+  }, []);
+
+  if (!user) return (<></>);
+
   return (
     <div className={classes.container}>
       <Typography
         variant="subtitle1"
         className={classes.text}
       >
-        {infoUser}
+        {user.id}
+        {user.username}
+        {user.email}
       </Typography>
-      <Button
-        color="primary"
-        variant="contained"
-        type="button"
-        onClick={async () => {
-          const info = await user();
-
-          setInfoUser(info);
-        }}
-      >
-        Get personal info
-      </Button>
     </div>
   );
 }

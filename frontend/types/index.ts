@@ -8,3 +8,9 @@ export interface Room {
   id: string;
   name: string;
 }
+
+export interface Message {
+  room: string;
+  sender: string;
+  message: string;
+}

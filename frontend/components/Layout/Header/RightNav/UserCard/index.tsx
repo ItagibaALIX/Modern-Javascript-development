@@ -1,10 +1,8 @@
-import React, { useRef, useState } from 'react';
-import clsx from 'clsx';
+import React, { useEffect, useRef, useState } from 'react';
 import Popper from '@material-ui/core/Popper';
 import Grow from '@material-ui/core/Grow';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -12,6 +10,7 @@ import { useUser } from 'hooks/auth';
 
 import MenuItemLink from 'components/Layout/Header/RightNav/UserCard/MenuItemLink';
 import Avatar from 'components/Avatar';
+import { useUserContext } from 'components/Provider/User';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -59,7 +58,18 @@ function UserCard(): JSX.Element {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
   const classes = useStyles();
-  const user = useUser();
+  const getUser = useUser();
+  const { user, setUser } = useUserContext();
+
+  useEffect(() => {
+    if (!user) {
+      getUser().then((newUser) => (
+        setUser(newUser)
+      )).catch((e) => {
+        console.log(e);
+      });
+    }
+  }, []);
 
   if (!user) {
     return null;
@@ -90,7 +100,7 @@ function UserCard(): JSX.Element {
       >
         <Avatar
           classes={{ picture: classes.avatar }}
-          user={user}
+          name={user}
           withName={false}
         />
         {open ? <ExpandLess /> : <ExpandMore />}

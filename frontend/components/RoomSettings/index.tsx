@@ -1,9 +1,13 @@
 import { Typography } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { Formik, Form } from 'formik';
+import { useInviteRoom } from 'hooks/rooms';
+import { InviteRoomParams, inviteRoomSchema } from 'utils/validation';
+import { useFindUser } from 'hooks/auth';
 
-import TextInput from 'components/TextInput';
 import Button from 'components/Button';
+import TextInput from 'components/TextInput';
+import { useMessageContext } from 'components/Provider/Message';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
   container: {
@@ -48,108 +52,112 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-export interface RoomSettingsProps {
-  user: { username: string };
-  // roomName: string;
-}
-
-function RoomSettings(props: RoomSettingsProps): JSX.Element {
-  const {
-    user,
-    // roomName = "The secret conv",
-  } = props;
-  const styles = useStyles({ name: user?.username ?? '' });
+function RoomSettings(): JSX.Element {
+  const invite = useInviteRoom();
+  const styles = useStyles();
+  const { currentRoom } = useMessageContext();
 
   return (
     <div className={styles.paper}>
+      {currentRoom
+        ? (
+          <div>
+            <Formik
+              initialValues={{ email: '', id: currentRoom.id }}
+              validationSchema={inviteRoomSchema}
+              onSubmit={async (values: InviteRoomParams): Promise<void> => {
+                console.log('onSubmit invite', values);
+                await invite(values);
+              }}
+            >
+              <Form noValidate>
+                <div className={styles.button}>
+                  <Typography variant="subtitle1" className={styles.roomName}>
+                    Add member:
+                  </Typography>
+                  <TextInput
+                    type="email"
+                    name="email"
+                    label="email"
+                    required
+                    fullWidth
+                  // onChange={async (values: FindUserParams): Promise<void> => {
+                  //   console.log("values", values);
+                  //   const possibleEmail = await findUser(values);
 
-      <div>
-        <Formik
-          initialValues={{ user: '' }}
-          // validationSchema={loginSchema}
-          onSubmit={(values): void => {
-            console.log(values);
-          }}
-        >
-          <Form noValidate className={styles.input}>
-            <div className={styles.button}>
-              <Typography variant="subtitle1" className={styles.roomName}>
-                Add member:
-              </Typography>
-              <TextInput
-                type="text"
-                name="user"
-                label="user"
-                required
-                fullWidth
-              />
-              <Button
-                color="primary"
-                variant="contained"
-                type="submit"
-                fullWidth
-              >
-                Add
-              </Button>
-            </div>
-          </Form>
-        </Formik>
-      </div>
-      <div>
-        <Formik
-          initialValues={{ user: '' }}
-          // validationSchema={loginSchema}
-          onSubmit={(values): void => {
-            console.log(values);
-          }}
-        >
-          <Form noValidate className={styles.input}>
-            <div className={styles.button}>
-              <Typography variant="subtitle1" className={styles.roomName}>
-                Change owner:
-              </Typography>
-              <TextInput
-                type="text"
-                name="user"
-                label="user"
-                required
-                fullWidth
-              />
-              <Button
-                color="primary"
-                variant="contained"
-                type="submit"
-                fullWidth
-              >
-                Add
-              </Button>
-            </div>
-          </Form>
-        </Formik>
-        <div className={styles.line} />
-        <div className={styles.controlButton}>
-          <div className={styles.button}>
-            <Button
-              color="primary"
-              variant="contained"
-              type="submit"
-              fullWidth
-            >
-              Archive channel
-            </Button>
+                  //   console.log("possibleEmail", possibleEmail);
+                  //   // if (possibleEmail) {
+                  //   // }
+                  // }}
+                  />
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    type="submit"
+                    fullWidth
+                  >
+                    Add
+                  </Button>
+                </div>
+              </Form>
+            </Formik>
           </div>
-          <div className={styles.button}>
-            <Button
-              color="primary"
-              variant="contained"
-              type="submit"
-              fullWidth
-            >
-              Leave channel
-            </Button>
-          </div>
-        </div>
-      </div>
+        //  <div>
+        //   <Formik
+        //     initialValues={{ user: '' }}
+        //     // validationSchema={loginSchema}
+        //     onSubmit={(values): void => {
+        //       console.log(values);
+        //     }}
+        //   >
+        //     <Form noValidate className={styles.input}>
+        //       <div className={styles.button}>
+        //         <Typography variant="subtitle1" className={styles.roomName}>
+        //           Change owner:
+        //         </Typography>
+        //         <TextInput
+        //           type="text"
+        //           name="user"
+        //           label="user"
+        //           required
+        //           fullWidth
+        //         />
+        //         <Button
+        //           color="primary"
+        //           variant="contained"
+        //           type="submit"
+        //           fullWidth
+        //         >
+        //           Add
+        //         </Button>
+        //       </div>
+        //     </Form>
+        //   </Formik>
+        //   <div className={styles.line} />
+        //   <div className={styles.controlButton}>
+        //     <div className={styles.button}>
+        //       <Button
+        //         color="primary"
+        //         variant="contained"
+        //         type="submit"
+        //         fullWidth
+        //       >
+        //         Archive channel
+        //       </Button>
+        //     </div>
+        //     <div className={styles.button}>
+        //       <Button
+        //         color="primary"
+        //         variant="contained"
+        //         type="submit"
+        //         fullWidth
+        //       >
+        //         Leave channel
+        //       </Button>
+        //     </div>
+        //   </div>
+        // </div>
+        ) : (<></>)}
     </div>
   );
 }

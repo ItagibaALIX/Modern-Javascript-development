@@ -4,15 +4,16 @@ import axios from 'axios';
 import { MessageSendParams } from '../utils/validation';
 
 export default function useMessages(): (variables: MessageSendParams) => Promise<void> {
-  return (async ({ message }: MessageSendParams): Promise<void> => {
+  return (async ({ message, room }: MessageSendParams): Promise<void> => {
     try {
-      log.debug('call Send');
+      log.debug('call Send', message, room);
       await axios({
         method: 'post',
         url: 'http://localhost:4000/messages/send',
         timeout: 4000,
         data: {
           message,
+          room,
         },
         headers: {
           Authorization: `Bearer ${window.localStorage.getItem('token')}`,

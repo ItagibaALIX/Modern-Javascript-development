@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
 import { Formik, Form } from 'formik';
+import useMessages from 'hooks/messages';
+import { MessageSendParams, messageSendSchema } from 'utils/validation';
 
 import Button from 'components/Button';
 import TextInputChat from 'components/TextInputChat';
+import { useMessageContext } from 'components/Provider/Message';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -34,19 +37,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Input(props): JSX.Element {
-  const { socket } = props;
+function Input(): JSX.Element {
   const classes = useStyles();
-  const initialValues = { message: '' };
+  const { currentRoom } = useMessageContext();
+  const initialValues = { message: '', room: currentRoom.id };
+  const sendMessage = useMessages();
 
   return (
     <div className={classes.container}>
       <Formik
         initialValues={initialValues}
-        // validationSchema={loginSchema}
-        onSubmit={(values: { message: string }): void => {
-          console.log('emit:', values.message);
-          socket.emit('msgToServer', values.message);
+        validationSchema={messageSendSchema}
+        onSubmit={(values: MessageSendParams): void => {
+          console.log('currentRoom.id', currentRoom.id, currentRoom.name);
+          sendMessage({ room: currentRoom.id, message: values.message } as MessageSendParams);
         }}
       >
         <Form noValidate className={classes.containerInput}>
