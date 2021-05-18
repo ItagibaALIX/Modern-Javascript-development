@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<head>
+    <style>
+        body {display: flex; flex-direction: column; justify-content: center; align-items: center}
+        h1 {text-align: center; color: black}
+        .divider {margin-top: 20px; margin-bottom: 20px; height: 2px; background-color: grey; width: 100%;}
+        p {text-align: center; color: black}
+        a {text-align: center;}
+    </style>
+</head>
+<body>
+    <h1>Hello {{user.firstname}} {{user.lastname}}</h1>
+    <div class="divider"></div>
+    <p>You just log in to the account linked with this email.<br>If it wasn't you, make sure your password is strong enough.</p>
+    <p>If you want to change your password, click on the link below :<br><a href="{{link}}">{{link}}</a></p>
+    <div class="divider"></div>
+    <p>We hope to see you soon !<br>Modern JS Team</p>
+</body>
+</html>
