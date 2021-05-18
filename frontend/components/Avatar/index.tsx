@@ -27,7 +27,7 @@ function getSize(size: string): string {
   return '40px';
 }
 
-function getFontSize(size: number): number {
+function getFontSize(size: string): number {
   if (size === 'mini') {
     return 12;
   }
