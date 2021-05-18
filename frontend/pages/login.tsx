@@ -3,6 +3,7 @@ import { loginSchema, LoginParams } from 'utils/validation';
 import { makeStyles, Typography } from '@material-ui/core';
 import { Formik, Form } from 'formik';
 import { useLogin } from 'hooks/auth';
+import { useRouter } from 'next/router';
 
 import TextInput from 'components/TextInput';
 import PasswordInput from 'components/PasswordInput';
@@ -63,6 +64,7 @@ export default function Login(): JSX.Element {
   const classes = useStyles();
   const initialValues: LoginParams = { email: '', password: '' } as LoginParams;
   const login = useLogin();
+  const router = useRouter();
 
   return (
     <div className={classes.container}>
@@ -76,8 +78,12 @@ export default function Login(): JSX.Element {
         <Formik
           initialValues={initialValues}
           validationSchema={loginSchema}
-          onSubmit={(values: LoginParams): void => {
-            login(values);
+          onSubmit={async (values: LoginParams): Promise<void> => {
+            const token = await login(values);
+
+            if (token) {
+              router.push('/');
+            }
           }}
         >
           <Form noValidate className={classes.input}>

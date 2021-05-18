@@ -3,14 +3,24 @@ import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-
-import RightNav from 'components/Layout/Header/RightNav';
-import Logo from 'components/Logo';
 import { useUser } from 'hooks/auth';
-import { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import { Formik, Form } from 'formik';
+import { useCreateRoom, useRooms } from 'hooks/rooms';
+import { CreateRoomParams, createRoomSchema } from 'utils/validation';
+
+import Button from 'components/Button';
+import TextInput from 'components/TextInput';
+import Logo from 'components/Logo';
+import RightNav from 'components/Layout/Header/RightNav';
+import { useMessageContext } from 'components/Provider/Message';
+import { useUserContext } from 'components/Provider/User';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -46,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'left',
     margin: '0px 4px',
   },
-  addRoomButton: {
+  addRoomButton: {
     width: '150px',
     height: '40px',
     borderRadius: '7px',
@@ -63,15 +73,26 @@ function Header(): JSX.Element {
   const classes = useStyles();
   const elevationTrigger = useScrollTrigger({ threshold: 10, disableHysteresis: true });
   const getUser = useUser();
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useUserContext();
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
-    getUser().then((newUser) => (
-      setUser(newUser)
-    )).catch((e) => {
-      console.log(e);
-    });
-  }, [getUser]);
+    if (!user) {
+      getUser().then((newUser) => (
+        setUser(newUser)
+      )).catch((e) => {
+        console.log(e);
+      });
+    }
+  }, []);
 
   return (
     <AppBar
@@ -88,18 +109,88 @@ function Header(): JSX.Element {
           <Logo type="classic" size="sm" />
         </Hidden>
         {
-          user ?
-          <Fab color="primary" aria-label="add" className={classes.addRoomButton}>
-            <Typography variant="subtitle1" className={classes.textAddRoomButton}>
-              New room
-            </Typography>
-            <AddIcon />
-          </Fab> : <></>
+          user
+            ? (
+              <Fab color="primary" aria-label="add" className={classes.addRoomButton} onClick={handleClickOpen}>
+                <Typography variant="subtitle1" className={classes.textAddRoomButton}>
+                  New room
+                </Typography>
+                <AddIcon />
+              </Fab>
+            ) : <></>
         }
         <RightNav />
       </Toolbar>
+      <CreateRoomDialogue
+        handleClickOpen={handleClickOpen}
+        handleClose={handleClose}
+        open={open}
+      />
     </AppBar>
   );
 }
 
 export default Header;
+
+function CreateRoomDialogue(props) {
+  const { handleClose, open } = props;
+  const createRoom = useCreateRoom();
+  const getRooms = useRooms();
+  const { setRooms } = useMessageContext();
+
+  return (
+    <div>
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Create Room</DialogTitle>
+        <DialogContent>
+          <Formik
+            initialValues={{ name: '' }}
+            validationSchema={createRoomSchema}
+            onSubmit={
+              async (values: CreateRoomParams): Promise<void> => {
+                console.log('create room:', values);
+                await createRoom(values);
+                getRooms().then((userRooms) => {
+                  if (userRooms == null) {
+                    return;
+                  }
+                  setRooms(() => userRooms);
+                });
+                handleClose();
+              }
+            }
+          >
+            <Form noValidate>
+              <TextInput
+                type="text"
+                name="name"
+                label="room name"
+                required
+                fullWidth
+              />
+              <DialogActions>
+                <Button
+                  color="primary"
+                  variant="outlined"
+                  type="button"
+                  fullWidth
+                  onClick={handleClose}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  type="submit"
+                  fullWidth
+                >
+                  Create
+                </Button>
+              </DialogActions>
+            </Form>
+          </Formik>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}

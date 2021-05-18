@@ -6,8 +6,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Menu from '@material-ui/core/Menu';
 import CloseIcon from '@material-ui/icons/Close';
 
-import Button from 'components/Button';
 import ButtonLink from 'components/ButtonLink';
+import { useUserContext } from 'components/Provider/User';
 
 const useStyles = makeStyles((theme) => ({
   popoverPaper: {
@@ -47,15 +47,17 @@ function MobileMenu(): JSX.Element {
   const styles = useStyles();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const getUser = useUser();
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useUserContext();
 
   useEffect(() => {
-    getUser().then((newUser) => (
-      setUser(newUser)
-    )).catch((e) => {
-      console.log(e);
-    });
-  }, [getUser]);
+    if (!user) {
+      getUser().then((newUser) => (
+        setUser(newUser)
+      )).catch((e) => {
+        console.log(e);
+      });
+    }
+  }, []);
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>): void => {
     setAnchorEl(event.currentTarget);

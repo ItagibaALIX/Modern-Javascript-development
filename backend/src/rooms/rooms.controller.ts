@@ -1,18 +1,41 @@
-import { Controller, Param, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req, Request, UseGuards } from '@nestjs/common';
 import { RoomsService } from './rooms.service';
 import { Room } from '@prisma/client';
 import { AuthenticatedGuard } from '../auth/authenticated.guard';
+import { UsersService } from "../users/users.service";
+
+class InviteToRoomDto {
+  email: string;
+}
+
+class CreateRoomDto {
+  name: string;
+}
 
 @UseGuards(AuthenticatedGuard)
 @Controller('rooms')
 export class RoomsController {
-  constructor(private roomsService: RoomsService) {
+  constructor(
+    private roomsService: RoomsService,
+    private usersService: UsersService,
+    ) {
   }
 
-  @Post(':name')
-  async createRoom(@Param() params, @Request() req): Promise<Room> {
+  @Post('/')
+  async createRoom(@Request() req, @Body() createRoomData: CreateRoomDto): Promise<Room> {
     return this.roomsService.createRoom(req.user, {
-      name: params.name
+      name: createRoomData.name
     });
+  }
+
+  @Post(':id/invite')
+  async invite(@Param() params, @Request() req, @Body() inviteToRoomData: InviteToRoomDto): Promise<Room> {
+    const user = await this.usersService.user({ email: inviteToRoomData.email });
+    return this.roomsService.addToRoom(user, params.id)
+  }
+
+  @Get('/')
+  async getRooms(@Request() req): Promise<Room[]> {
+    return this.roomsService.getUserRooms(req.user.id);
   }
 }

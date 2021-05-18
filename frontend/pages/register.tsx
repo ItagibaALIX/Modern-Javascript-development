@@ -3,6 +3,7 @@ import { Formik, Form } from 'formik';
 import { Typography, makeStyles } from '@material-ui/core';
 import { useRegister } from 'hooks/auth';
 import { registerSchema, RegisterParams } from 'utils/validation';
+import { useRouter } from 'next/router';
 
 import TextInput from 'components/TextInput';
 import PasswordInput from 'components/PasswordInput';
@@ -59,6 +60,7 @@ export default function Register(): JSX.Element {
   const classes = useStyles();
   const initialValues: RegisterParams = { username: '', email: '', password: '' } as RegisterParams;
   const register = useRegister();
+  const router = useRouter();
 
   return (
     <div className={classes.container}>
@@ -73,8 +75,12 @@ export default function Register(): JSX.Element {
           initialValues={initialValues}
           validationSchema={registerSchema}
           onSubmit={
-              (values: RegisterParams): void => {
-                register(values);
+              async (values: RegisterParams): Promise<void> => {
+                const user = await register(values);
+
+                if (user) {
+                  router.push('/login');
+                }
               }
           }
         >

@@ -1,13 +1,13 @@
 import { User } from 'types';
 import axios from 'axios';
 import log from 'loglevel';
-import { LoginParams, RegisterParams } from 'utils/validation';
+import { FindUserParams, LoginParams, RegisterParams } from 'utils/validation';
 
-export function useLogin(): (variables: LoginParams) => Promise<void> {
-  return (async ({ email, password }: LoginParams): Promise<void> => {
+export function useLogin(): (variables: LoginParams) => Promise<string> {
+  return (async ({ email, password }: LoginParams): Promise<string> => {
     try {
       log.debug('call Login');
-      await axios({
+      const { data: { access_token: accessToken } } = await axios({
         method: 'post',
         url: 'http://localhost:4000/auth/login',
         timeout: 4000,
@@ -16,18 +16,20 @@ export function useLogin(): (variables: LoginParams) => Promise<void> {
           password,
         },
       });
+      window.localStorage.setItem('token', accessToken);
       log.debug('Login success');
+      return (accessToken);
     } catch (err) {
       log.error(new Error(`Login failed:${err}`));
     }
   });
 }
 
-export function useRegister(): (variables: RegisterParams) => Promise<void> {
-  return (async ({ username, email, password }: RegisterParams): Promise<void> => {
+export function useRegister(): (variables: RegisterParams) => Promise<User> {
+  return (async ({ username, email, password }: RegisterParams): Promise<User> => {
     try {
       log.debug('call Register');
-      await axios({
+      const resp = await axios({
         method: 'post',
         url: 'http://localhost:4000/auth/register',
         timeout: 4000,
@@ -38,6 +40,7 @@ export function useRegister(): (variables: RegisterParams) => Promise<void> {
         },
       });
       log.debug('Register success');
+      return resp.data;
     } catch (err) {
       log.error(new Error(`Register failed:${err}`));
     }
@@ -52,8 +55,35 @@ export function useUser(): () => Promise<User> {
         method: 'get',
         url: 'http://localhost:4000/users/me',
         timeout: 4000,
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem('token')}`,
+        },
       });
-      log.debug('call User (me) susccess');
+      log.debug('call User (me) success');
+      return (resp.data);
+    } catch (err) {
+      log.error(new Error(`User (me) failed:${err}`));
+      return (null);
+    }
+  });
+}
+
+export function useFindUser(): (variables: FindUserParams) => Promise<[FindUserParams] | null> {
+  return (async ({ email }: FindUserParams): Promise<[FindUserParams] | null> => {
+    try {
+      log.debug('call User (me)');
+      const resp = await axios({
+        method: 'get',
+        url: 'http://localhost:4000/users/',
+        timeout: 4000,
+        data: {
+          email,
+        },
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem('token')}`,
+        },
+      });
+      log.debug('call User (me) success');
       return (resp.data);
     } catch (err) {
       log.error(new Error(`User (me) failed:${err}`));

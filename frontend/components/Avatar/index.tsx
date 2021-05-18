@@ -2,8 +2,6 @@ import { Typography, Avatar as MuiAvatar } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
-import { User } from '../../types';
-
 function hashCode(str) {
   let hash = 0;
   for (let i = 0; i < str.length; i += 1) {
@@ -29,7 +27,7 @@ function getSize(size: string): string {
   return '40px';
 }
 
-function getFontSize(size: number): number {
+function getFontSize(size: string): number {
   if (size === 'mini') {
     return 12;
   }
@@ -37,7 +35,8 @@ function getFontSize(size: number): number {
 }
 
 interface StyledProps {
-  name: string;
+  name: string,
+  size: string,
 }
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -48,13 +47,13 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   picture: {
     marginRight: theme.spacing(1),
-    width: (props: { size: string }): string => getSize(props.size),
-    height: (props: { size: string }): string => getSize(props.size),
+    width: (props: StyledProps): string => (getSize(props.size)),
+    height: (props: StyledProps): string => (getSize(props.size)),
     backgroundColor: (props: StyledProps) => `#${intToRGB(hashCode(props.name))}`,
     opacity: 0.8,
   },
   name: {
-    fontSize: (props: { size: string }): number => getFontSize(props.size),
+    fontSize: (props: StyledProps): number => getFontSize(props.size),
   },
   containerLetter: {
     display: 'flex',
@@ -71,19 +70,19 @@ export interface AvatarProps {
     picture?: string,
     name?: string,
   };
-  user: User;
+  name: string;
   withName?: boolean
   size?: 'mini' | 'medium',
 }
 
 function Avatar(props: AvatarProps): JSX.Element {
   const {
-    user,
+    name,
     classes,
     withName = true,
-    size = "mini",
+    size = 'mini',
   } = props;
-  const styles = useStyles({ name: user?.username ?? '', size });
+  const styles = useStyles({ name: name ?? '', size });
   const containerClass = clsx(styles.container, classes?.container);
   const pictureClass = clsx(styles.picture, classes?.picture);
   const nameClass = clsx(styles.name, classes?.name);
@@ -98,11 +97,11 @@ function Avatar(props: AvatarProps): JSX.Element {
       >
         <div className={styles.containerLetter}>
           <Typography className={nameClass} variant="body1">
-            {user?.username?.[0].toUpperCase()}
+            {name && name[0] ? name?.[0].toUpperCase() : ""}
           </Typography>
         </div>
       </MuiAvatar>
-      { withName && <Typography className={nameClass} variant="body1">{user?.username}</Typography> }
+      { withName && <Typography className={nameClass} variant="body1">{name}</Typography> }
     </div>
   );
 }
