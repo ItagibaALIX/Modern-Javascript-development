@@ -35,7 +35,8 @@ function getFontSize(size: string): number {
 }
 
 interface StyledProps {
-  name: string;
+  name: string,
+  size: string,
 }
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -46,13 +47,13 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
   picture: {
     marginRight: theme.spacing(1),
-    width: (props: { size: string }): string => getSize(props.size),
-    height: (props: { size: string }): string => getSize(props.size),
+    width: (props: StyledProps): string => (getSize(props.size)),
+    height: (props: StyledProps): string => (getSize(props.size)),
     backgroundColor: (props: StyledProps) => `#${intToRGB(hashCode(props.name))}`,
     opacity: 0.8,
   },
   name: {
-    fontSize: (props: { size: string }): number => getFontSize(props.size),
+    fontSize: (props: StyledProps): number => getFontSize(props.size),
   },
   containerLetter: {
     display: 'flex',

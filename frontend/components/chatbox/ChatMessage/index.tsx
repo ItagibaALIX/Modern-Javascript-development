@@ -81,12 +81,12 @@ function MessageEngine(props): JSX.Element {
                   {message.message}
                 </Typography>
               </div>
-              <Avatar user={message.sender} withName={false} />
+              <Avatar name={message.sender} withName={false} />
             </>
           )
           : (
             <>
-              <Avatar user={message.sender} withName={false} />
+              <Avatar name={message.sender} withName={false} />
               <div className={classes.containerMessage}>
                 <Typography
                   variant="subtitle1"

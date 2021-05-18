@@ -9,8 +9,8 @@ import MessageContext from './contex';
 function MessageProvider(props) {
   const { children } = props;
   const [currentRoom, setCurrentRoom] = useState<Room>(null);
-  const [rooms, setRooms] = useState<[Room]>([]);
-  const [messages, setMessages] = useState<[Message]>([]);
+  const [rooms, setRooms] = useState<[Room]>();
+  const [messages, setMessages] = useState<Array<Message>>();
   const { user } = useUserContext();
 
   // if (process.browser) {
@@ -29,7 +29,7 @@ function MessageProvider(props) {
         console.log('check local storage', localMessage);
         if (localMessage && localMessage.length) {
           const parsed = JSON.parse(localMessage);
-          const cp = new Array<[Message]>(...parsed);
+          const cp = new Array<Message>(...parsed);
 
           setMessages(cp);
         }
@@ -37,12 +37,12 @@ function MessageProvider(props) {
       socket.on(user.id, (data) => {
         console.log('new message:', user.id, JSON.parse(data));
         if (messages) {
-          const cp = new Array<[Message]>(...messages);
+          const cp = new Array<Message>(...messages);
           cp.push(JSON.parse(data));
           setMessages(cp);
           window.localStorage.setItem('messages', JSON.stringify(cp));
         } else {
-          const cp = new Array<[Message]>(JSON.parse(data));
+          const cp = new Array<Message>(JSON.parse(data));
 
           setMessages(cp);
           window.localStorage.setItem('messages', JSON.stringify(cp));

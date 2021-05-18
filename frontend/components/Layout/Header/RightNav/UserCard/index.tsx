@@ -100,7 +100,7 @@ function UserCard(): JSX.Element {
       >
         <Avatar
           classes={{ picture: classes.avatar }}
-          user={user}
+          name={user}
           withName={false}
         />
         {open ? <ExpandLess /> : <ExpandMore />}
