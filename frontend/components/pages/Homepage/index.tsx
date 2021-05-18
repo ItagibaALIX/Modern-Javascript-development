@@ -90,6 +90,10 @@ function Homepage(): JSX.Element {
     });
   }, []);
 
+  if (!rooms || !rooms.length) {
+    return (<></>)
+  }
+
   const listRooms = rooms.map((r) => (
     <div className={classes.rooms} key={JSON.stringify(r)}>
       <RoomBox room={r} user={user} />

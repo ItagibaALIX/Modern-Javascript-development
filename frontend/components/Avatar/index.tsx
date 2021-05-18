@@ -97,7 +97,7 @@ function Avatar(props: AvatarProps): JSX.Element {
       >
         <div className={styles.containerLetter}>
           <Typography className={nameClass} variant="body1">
-            {name?.[0].toUpperCase()}
+            {name && name[0] ? name?.[0].toUpperCase() : ""}
           </Typography>
         </div>
       </MuiAvatar>

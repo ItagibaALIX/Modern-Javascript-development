@@ -24,7 +24,7 @@ function MessageProvider(props) {
         autoConnect: true,
       });
       console.log('socket:', socket, 'user id:');
-      if (!messages.length) {
+      if (!messages || !messages.length) {
         const localMessage = window.localStorage.getItem('messages');
         console.log('check local storage', localMessage);
         if (localMessage && localMessage.length) {
