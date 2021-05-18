@@ -31,6 +31,7 @@ export class RoomsController {
   @Post(':id/invite')
   async invite(@Param() params, @Request() req, @Body() inviteToRoomData: InviteToRoomDto): Promise<Room> {
     const user = await this.usersService.user({ email: inviteToRoomData.email });
+    console.log('user', user, 'req', req.user);
     return this.roomsService.addToRoom(user, params.id)
   }
 
