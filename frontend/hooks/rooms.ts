@@ -1,8 +1,8 @@
 import log from 'loglevel';
 import axios from 'axios';
+import { CreateRoomParams, InviteRoomParams } from 'utils/validation';
 
 import { Room } from '../types';
-import { CreateRoomParams, InviteRoomParams } from 'utils/validation';
 
 export function useRooms(): () => Promise<[Room]> {
   return (async (): Promise<[Room] | null> => {
@@ -34,7 +34,7 @@ export function useCreateRoom(): (variables: CreateRoomParams) => Promise<void> 
         url: 'http://localhost:4000/rooms',
         timeout: 4000,
         data: {
-          name: name,
+          name,
         },
         headers: {
           Authorization: `Bearer ${window.localStorage.getItem('token')}`,
@@ -59,7 +59,7 @@ export function useInviteRoom(): (variables: InviteRoomParams) => Promise<void> 
         url: `http://localhost:4000/rooms/${id}/invite`,
         timeout: 4000,
         data: {
-          email: email,
+          email,
         },
         headers: {
           Authorization: `Bearer ${window.localStorage.getItem('token')}`,

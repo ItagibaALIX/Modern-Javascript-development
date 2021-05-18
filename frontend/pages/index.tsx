@@ -1,10 +1,10 @@
 import React from 'react';
+import { makeStyles, Typography } from '@material-ui/core';
 
 import Head from 'components/Head';
 import Homepage from 'components/pages/Homepage';
 import Layout from 'components/Layout';
 import { useUserContext } from 'components/Provider/User';
-import { makeStyles, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -31,17 +31,19 @@ export default function Home(): JSX.Element {
   return (
     <Layout>
       <Head title="Modern Javascript development" />
-      { 
-      user ? 
-      (<Homepage />) :
-      <div className={classes.container}>
-        <Typography
-          variant="subtitle1"
-          className={classes.text}
-        >
-          Please Login or sign up to use MDJ
-        </Typography>
-      </div>
+      {
+      user
+        ? (<Homepage />)
+        : (
+          <div className={classes.container}>
+            <Typography
+              variant="subtitle1"
+              className={classes.text}
+            >
+              Please Login or sign up to use MDJ
+            </Typography>
+          </div>
+        )
     }
     </Layout>
   );

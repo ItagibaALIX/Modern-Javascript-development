@@ -3,27 +3,22 @@ import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-
-import RightNav from 'components/Layout/Header/RightNav';
-import Logo from 'components/Logo';
 import { useUser } from 'hooks/auth';
-import { useState, useEffect } from 'react';
-
-import React from 'react';
-import TextField from '@material-ui/core/TextField';
+import React, { useEffect } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import TextInput from 'components/TextInput';
 import { Formik, Form } from 'formik';
-import Button from 'components/Button';
 import { useCreateRoom, useRooms } from 'hooks/rooms';
 import { CreateRoomParams, createRoomSchema } from 'utils/validation';
+
+import Button from 'components/Button';
+import TextInput from 'components/TextInput';
+import Logo from 'components/Logo';
+import RightNav from 'components/Layout/Header/RightNav';
 import { useMessageContext } from 'components/Provider/Message';
 import { useUserContext } from 'components/Provider/User';
 
@@ -88,7 +83,6 @@ function Header(): JSX.Element {
   const handleClose = () => {
     setOpen(false);
   };
-  // const createRoom = () => {console.log("toto")};
 
   useEffect(() => {
     if (!user) {
@@ -115,13 +109,15 @@ function Header(): JSX.Element {
           <Logo type="classic" size="sm" />
         </Hidden>
         {
-          user ?
-            <Fab color="primary" aria-label="add" className={classes.addRoomButton} onClick={handleClickOpen}>
-              <Typography variant="subtitle1" className={classes.textAddRoomButton}>
-                New room
-            </Typography>
-              <AddIcon />
-            </Fab> : <></>
+          user
+            ? (
+              <Fab color="primary" aria-label="add" className={classes.addRoomButton} onClick={handleClickOpen}>
+                <Typography variant="subtitle1" className={classes.textAddRoomButton}>
+                  New room
+                </Typography>
+                <AddIcon />
+              </Fab>
+            ) : <></>
         }
         <RightNav />
       </Toolbar>
@@ -152,7 +148,7 @@ function CreateRoomDialogue(props) {
             validationSchema={createRoomSchema}
             onSubmit={
               async (values: CreateRoomParams): Promise<void> => {
-                console.log("create room:", values)
+                console.log('create room:', values);
                 await createRoom(values);
                 getRooms().then((userRooms) => {
                   if (userRooms == null) {
@@ -181,7 +177,7 @@ function CreateRoomDialogue(props) {
                   onClick={handleClose}
                 >
                   Cancel
-              </Button>
+                </Button>
                 <Button
                   color="primary"
                   variant="contained"
@@ -189,7 +185,7 @@ function CreateRoomDialogue(props) {
                   fullWidth
                 >
                   Create
-              </Button>
+                </Button>
               </DialogActions>
             </Form>
           </Formik>

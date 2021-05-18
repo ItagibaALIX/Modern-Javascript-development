@@ -2,8 +2,6 @@ import { Typography, Avatar as MuiAvatar } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
-import { User } from '../../types';
-
 function hashCode(str) {
   let hash = 0;
   for (let i = 0; i < str.length; i += 1) {

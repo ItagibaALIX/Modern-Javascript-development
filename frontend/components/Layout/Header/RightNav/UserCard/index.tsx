@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import clsx from 'clsx';
 import Popper from '@material-ui/core/Popper';
 import Grow from '@material-ui/core/Grow';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import makeStyles from '@material-ui/core/styles/makeStyles';

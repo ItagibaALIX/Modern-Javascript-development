@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { User } from 'types/index';
+
 import UserContext from './contex';
-import { User } from 'types/index'
 // import { useUser } from 'hooks/auth';
 
 function UserProvider(props) {
@@ -12,7 +13,7 @@ function UserProvider(props) {
   //   if (process.browser) {
   //     getUser().then((user) => {
   //     }
- 
+
   //     ).catch((e) => {
   //       window.localStorage.setItem('token', null);
   //       setUser(null)
@@ -25,7 +26,8 @@ function UserProvider(props) {
     <UserContext.Provider value={{
       user,
       setUser,
-    }}>
+    }}
+    >
       {children}
     </UserContext.Provider>
   );

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
 import { Formik, Form } from 'formik';
+import useMessages from 'hooks/messages';
+import { MessageSendParams, messageSendSchema } from 'utils/validation';
 
 import Button from 'components/Button';
 import TextInputChat from 'components/TextInputChat';
-import useMessages from 'hooks/messages';
-import { MessageSendParams, messageSendSchema } from 'utils/validation';
 import { useMessageContext } from 'components/Provider/Message';
 
 const useStyles = makeStyles((theme) => ({
@@ -49,7 +49,7 @@ function Input(): JSX.Element {
         initialValues={initialValues}
         validationSchema={messageSendSchema}
         onSubmit={(values: MessageSendParams): void => {
-          console.log("currentRoom.id", currentRoom.id, currentRoom.name);
+          console.log('currentRoom.id', currentRoom.id, currentRoom.name);
           sendMessage({ room: currentRoom.id, message: values.message } as MessageSendParams);
         }}
       >

@@ -1,12 +1,8 @@
-import React, { useState } from 'react';
-import io from 'socket.io-client';
+import React from 'react';
 import { makeStyles } from '@material-ui/core';
 
 import Input from './Input';
 import ChatMessage from './ChatMessage';
-import { useMessageContext } from 'components/Provider/Message';
-import { useEffect } from 'react';
-import { useUserContext } from 'components/Provider/User';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -25,7 +21,7 @@ function ChatBox(): JSX.Element {
 
   return (
     <div className={classes.container}>
-      <ChatMessage/>
+      <ChatMessage />
       <Input />
     </div>
   );

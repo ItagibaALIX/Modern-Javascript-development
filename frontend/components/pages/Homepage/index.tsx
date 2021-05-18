@@ -4,10 +4,10 @@ import { makeStyles, Paper, Typography } from '@material-ui/core';
 import RoomBox from 'components/RoomBox';
 import ChatBox from 'components/chatbox';
 import RoomSettings from 'components/RoomSettings';
-
-import { useRooms } from '../../../hooks/rooms';
 import { useMessageContext } from 'components/Provider/Message';
 import { useUserContext } from 'components/Provider/User';
+
+import { useRooms } from '../../../hooks/rooms';
 
 export default Homepage;
 
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
   paper: {
-    display: "flex",
+    display: 'flex',
     padding: theme.spacing(1),
     textAlign: 'center',
     flexDirection: 'column',
@@ -85,7 +85,7 @@ function Homepage(): JSX.Element {
       if (userRooms == null) {
         return;
       }
-      console.debug("userRooms", userRooms);
+      console.debug('userRooms', userRooms);
       setRooms(() => userRooms);
     });
   }, []);

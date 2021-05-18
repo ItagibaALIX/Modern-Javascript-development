@@ -3,12 +3,12 @@ import { loginSchema, LoginParams } from 'utils/validation';
 import { makeStyles, Typography } from '@material-ui/core';
 import { Formik, Form } from 'formik';
 import { useLogin } from 'hooks/auth';
+import { useRouter } from 'next/router';
 
 import TextInput from 'components/TextInput';
 import PasswordInput from 'components/PasswordInput';
 import TextLink from 'components/TextLink';
 import Button from 'components/Button';
-import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -82,7 +82,7 @@ export default function Login(): JSX.Element {
             const token = await login(values);
 
             if (token) {
-              router.push("/")
+              router.push('/');
             }
           }}
         >

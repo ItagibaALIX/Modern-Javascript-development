@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
 import { useUser } from 'hooks/auth';
-import { User } from 'types';
 
-import Button from 'components/Button';
 import { useUserContext } from 'components/Provider/User';
 
 const useStyles = makeStyles((theme) => ({
@@ -37,7 +35,7 @@ export default function Me(): JSX.Element {
     });
   }, []);
 
-  if (!user) return (<></>) 
+  if (!user) return (<></>);
 
   return (
     <div className={classes.container}>
@@ -52,5 +50,3 @@ export default function Me(): JSX.Element {
     </div>
   );
 }
-
-

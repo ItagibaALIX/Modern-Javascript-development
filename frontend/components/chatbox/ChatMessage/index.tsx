@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
 
 import Avatar from 'components/Avatar';
 import { useMessageContext } from 'components/Provider/Message';
@@ -62,10 +61,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Message(props): JSX.Element {
+function MessageEngine(props): JSX.Element {
   const { message } = props;
-  // const { id } = props.m.user;
-
   const { user } = useUserContext();
   const isMyMessage = user.username.localeCompare(message.sender);
   const classes = useStyles({ isMyMessage: !isMyMessage });
@@ -106,23 +103,22 @@ function Message(props): JSX.Element {
 }
 
 function ChatMessage(): JSX.Element {
-  const classes = useStyles({ isMyMessage: true});
+  const classes = useStyles({ isMyMessage: true });
   const { messages, currentRoom } = useMessageContext();
 
-  console.log("messages", messages);
+  console.log('messages', messages);
   const messagesFormated = messages.map((message, idx) => {
     console.log(currentRoom.id, message.room);
-    const filterRoom = currentRoom.id.localeCompare(message.room)
+    const filterRoom = currentRoom.id.localeCompare(message.room);
 
-    // console.log("filterRoom", filterRoom)
     if (filterRoom) {
       return (
-        <div key={JSON.stringify(message) + idx}></div>
-      )
+        <div key={JSON.stringify(message) + idx} />
+      );
     }
     return (
-      <Message message={message} key={JSON.stringify(message) + idx}/>
-    )
+      <MessageEngine message={message} key={JSON.stringify(message) + idx} />
+    );
   });
 
   return (

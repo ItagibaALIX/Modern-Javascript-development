@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import MessageContext from './contex';
-import { Room, Message } from 'types/index'
+import { Room, Message } from 'types/index';
 import io from 'socket.io-client';
+
 import { useUserContext } from '../User';
+
+import MessageContext from './contex';
 
 function MessageProvider(props) {
   const { children } = props;
@@ -12,42 +14,45 @@ function MessageProvider(props) {
   const { user } = useUserContext();
 
   // if (process.browser) {
-
-  //   window.localStorage.setItem('messages', []);
+  //   window.localStorage.setItem('messages', '');
   //   window.localStorage.setItem('token', '');
   // }
-  // window.localStorage.setItem('messages', []);
-
-  console.log("messages refresh ?", messages)
 
   useEffect(() => {
     if (user) {
       const socket = io(`ws://localhost:4001?token=${window.localStorage.getItem('token')}`, {
         autoConnect: true,
       });
-      console.log("socket:", socket, "user id:", );
-      // if (!messages) {
-      //   const localMessage = window.localStorage.getItem('messages');
-      //   if (localMessage) {
-      //     setMessages(JSON.parse(localMessage));
-      //   }
-      // }
+      console.log('socket:', socket, 'user id:');
+      if (!messages.length) {
+        const localMessage = window.localStorage.getItem('messages');
+        console.log('check local storage', localMessage);
+        if (localMessage && localMessage.length) {
+          const parsed = JSON.parse(localMessage);
+          const cp = new Array<[Message]>(...parsed);
+
+          setMessages(cp);
+        }
+      }
       socket.on(user.id, (data) => {
-        console.log(user.id, JSON.parse(data));
+        console.log('new message:', user.id, JSON.parse(data));
         if (messages) {
-          messages.push(JSON.parse(data));
-          setMessages(messages);
-          // window.localStorage.setItem('messages', JSON.stringify(messages));
+          const cp = new Array<[Message]>(...messages);
+          cp.push(JSON.parse(data));
+          setMessages(cp);
+          window.localStorage.setItem('messages', JSON.stringify(cp));
         } else {
-          setMessages([JSON.parse(data)]);
-          // window.localStorage.setItem('messages', JSON.stringify([JSON.parse(data)]));
+          const cp = new Array<[Message]>(JSON.parse(data));
+
+          setMessages(cp);
+          window.localStorage.setItem('messages', JSON.stringify(cp));
         }
       });
       return (() => {
         socket.close();
-      })
+      });
     }
-  }, [ user, messages, setMessages])
+  }, [user, messages, setMessages]);
 
   return (
     <MessageContext.Provider value={{
@@ -57,11 +62,11 @@ function MessageProvider(props) {
       setRooms,
       messages,
       setMessages,
-    }}>
+    }}
+    >
       {children}
     </MessageContext.Provider>
   );
 }
 
 export default MessageProvider;
-

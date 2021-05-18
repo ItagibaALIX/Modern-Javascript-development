@@ -4,6 +4,7 @@ import { AppProps } from 'next/app';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from 'utils/theme';
+
 import MessageProvider from 'components/Provider/Message';
 import UserProvider from 'components/Provider/User';
 

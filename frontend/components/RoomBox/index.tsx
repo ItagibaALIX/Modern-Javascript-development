@@ -9,7 +9,7 @@ import { User, Room } from '../../types';
 const useStyles = makeStyles((theme: Theme) => createStyles({
   container: {
     display: 'flex',
-    flexDirection: "column",
+    flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'center',
     '&:hover': {
@@ -17,15 +17,15 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
       cursor: 'pointer',
     },
     padding: theme.spacing(2),
-    width: "100%", 
+    width: '100%',
   },
   room: {
     display: 'flex',
-    flexDirection: "row",
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingBottom: theme.spacing(1),
-    width: '100%'
+    width: '100%',
   },
   roomName: {
     fontSize: 14,
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     width: '100%',
   },
   noLine: {
-    border: `solid 1px rgba(0, 0, 0, 0)`,
+    border: 'solid 1px rgba(0, 0, 0, 0)',
     width: '100%',
   },
 }));
@@ -56,22 +56,22 @@ function RoomBox(props: RoomProps): JSX.Element {
 
   const onClick = () => {
     setCurrentRoom(room);
-    console.log("roomSelected", room.name, room.id);
+    console.log('roomSelected', room.name, room.id);
   };
 
   return (
-      <div className={styles.container} onClick={onClick}>
-        <div className={styles.room}>
-          <Avatar name={room.name} withName={false} size="medium" />
-          <Typography className={styles.roomName} variant="body1">
-            {room.name}
-          </Typography>
-        </div>
-        {
-          roomSelected == 0 ?
-            (<div className={styles.line} />) : (<div className={styles.noLine} />)
-        }
+    <div className={styles.container} onClick={onClick}>
+      <div className={styles.room}>
+        <Avatar name={room.name} withName={false} size="medium" />
+        <Typography className={styles.roomName} variant="body1">
+          {room.name}
+        </Typography>
       </div>
+      {
+          roomSelected == 0
+            ? (<div className={styles.line} />) : (<div className={styles.noLine} />)
+        }
+    </div>
   );
 }
 

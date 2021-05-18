@@ -6,7 +6,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Menu from '@material-ui/core/Menu';
 import CloseIcon from '@material-ui/icons/Close';
 
-import Button from 'components/Button';
 import ButtonLink from 'components/ButtonLink';
 import { useUserContext } from 'components/Provider/User';
 

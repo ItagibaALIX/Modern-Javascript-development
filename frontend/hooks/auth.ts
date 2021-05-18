@@ -3,8 +3,8 @@ import axios from 'axios';
 import log from 'loglevel';
 import { FindUserParams, LoginParams, RegisterParams } from 'utils/validation';
 
-export function useLogin(): (variables: LoginParams) => Promise<String> {
-  return (async ({ email, password }: LoginParams): Promise<String> => {
+export function useLogin(): (variables: LoginParams) => Promise<string> {
+  return (async ({ email, password }: LoginParams): Promise<string> => {
     try {
       log.debug('call Login');
       const { data: { access_token: accessToken } } = await axios({
@@ -77,7 +77,7 @@ export function useFindUser(): (variables: FindUserParams) => Promise<[FindUserP
         url: 'http://localhost:4000/users/',
         timeout: 4000,
         data: {
-          email: email,
+          email,
         },
         headers: {
           Authorization: `Bearer ${window.localStorage.getItem('token')}`,

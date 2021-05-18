@@ -1,12 +1,12 @@
 import { Typography } from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { Formik, Form } from 'formik';
-
-import TextInput from 'components/TextInput';
-import Button from 'components/Button';
 import { useInviteRoom } from 'hooks/rooms';
-import { FindUserParams, InviteRoomParams, inviteRoomSchema } from 'utils/validation';
+import { InviteRoomParams, inviteRoomSchema } from 'utils/validation';
 import { useFindUser } from 'hooks/auth';
+
+import Button from 'components/Button';
+import TextInput from 'components/TextInput';
 import { useMessageContext } from 'components/Provider/Message';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -52,27 +52,21 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   },
 }));
 
-// export interface RoomSettingsProps {
-//   user: { username: string };
-//   // roomName: string;
-// }
-
 function RoomSettings(): JSX.Element {
   const invite = useInviteRoom();
-  const findUser = useFindUser();
   const styles = useStyles();
   const { currentRoom } = useMessageContext();
 
   return (
     <div className={styles.paper}>
-      {currentRoom ?
-        (
+      {currentRoom
+        ? (
           <div>
             <Formik
               initialValues={{ email: '', id: currentRoom.id }}
               validationSchema={inviteRoomSchema}
               onSubmit={async (values: InviteRoomParams): Promise<void> => {
-                console.log("onSubmit invite", values)
+                console.log('onSubmit invite', values);
                 await invite(values);
               }}
             >
@@ -80,7 +74,7 @@ function RoomSettings(): JSX.Element {
                 <div className={styles.button}>
                   <Typography variant="subtitle1" className={styles.roomName}>
                     Add member:
-                </Typography>
+                  </Typography>
                   <TextInput
                     type="email"
                     name="email"
@@ -103,7 +97,7 @@ function RoomSettings(): JSX.Element {
                     fullWidth
                   >
                     Add
-                </Button>
+                  </Button>
                 </div>
               </Form>
             </Formik>
@@ -163,11 +157,9 @@ function RoomSettings(): JSX.Element {
         //     </div>
         //   </div>
         // </div>
-        ): (<></>)
-      }
-      </div>
-      );
-      
+        ) : (<></>)}
+    </div>
+  );
 }
 
 export default RoomSettings;
